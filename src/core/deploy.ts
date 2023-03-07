@@ -19,52 +19,43 @@ export async function deploy(
       // Delete existing temp deployment
       return deleteDirectory(clients, tempRoot);
     })
-    .then(() => {
-      console.log("Starting to create '" + tempRoot + "'.");
-      return client
-        .mkdirAsync(tempRoot)
-        .then(() => {
-          console.log("Successfully created '" + tempRoot + "'.");
-        })
-        .catch((err) => {
-          if (err.code !== 550) {
-            console.error("Error when creating '" + tempRoot + "'.");
-            throw err;
-          }
-        });
+    .then(async () => {
+      try {
+        await client.mkdirAsync(tempRoot);
+        console.log("Successfully created '" + tempRoot + "'.");
+      } catch (err) {
+        if (err.code !== 550) {
+          console.error("Error when creating '" + tempRoot + "'.");
+          throw err;
+        }
+      }
     })
     .then(() => {
       console.log("Starting to upload.");
       const outTotalPath = __dirname + localRoot;
       return uploadDirectory(clients, tempRoot, outTotalPath);
     })
-    .then(() => {
-      console.log("Starting to rename old deployment.");
-      return client
-        .renameAsync(remoteRoot, oldRoot)
-        .then(() => {
-          console.log(
-            "Successfully renamed '" + remoteRoot + "' => '" + oldRoot + "'."
-          );
-        })
-        .catch((err) => {
-          console.error("Error when renaming old deployment.");
-          throw err;
-        });
+    .then(async () => {
+      try {
+        await client.renameAsync(remoteRoot, oldRoot);
+        console.log("Renamed '" + remoteRoot + "' => '" + oldRoot + "'.");
+      } catch (err) {
+        console.error(
+          "Error when renaming '" + remoteRoot + "' => '" + oldRoot + "'."
+        );
+        throw err;
+      }
     })
-    .then(() => {
-      console.log("Starting to rename new deployment.");
-      return client
-        .renameAsync(tempRoot, remoteRoot)
-        .then(() => {
-          console.log(
-            "Successfully renamed '" + tempRoot + "' => '" + remoteRoot + "'."
-          );
-        })
-        .catch((err) => {
-          console.error("Error when renaming new deployment.");
-          throw err;
-        });
+    .then(async () => {
+      try {
+        await client.renameAsync(tempRoot, remoteRoot);
+        console.log("Renamed '" + tempRoot + "' => '" + remoteRoot + "'.");
+      } catch (err) {
+        console.error(
+          "Error when renaming " + tempRoot + "' => '" + remoteRoot + "'."
+        );
+        throw err;
+      }
     })
     .then(() => {
       console.log("Starting to delete '" + oldRoot + "'.");
