@@ -1,6 +1,6 @@
-import Client, { ListFile, FtpError } from "ftp";
+import Client, { ListingElement } from "ftp";
 import { promisify } from "util";
-import { AsyncClient, ClientConfig } from "../../types";
+import { AsyncClient, ClientConfig, ClientError } from "../../types";
 
 export async function getClients(concurrency = 30, config: ClientConfig) {
   let clientsPromises: Promise<AsyncClient>[] = [];
@@ -16,11 +16,11 @@ export async function getClients(concurrency = 30, config: ClientConfig) {
           client.putAsync = promisify(client.put).bind(client);
           client.deleteAsync = promisify(client.delete).bind(client);
           client.listAsync = async (remoteDir: string) =>
-            (await new Promise<ListFile[]>((resolve, reject) =>
+            (await new Promise<ListingElement[]>((resolve, reject) =>
               client.list(
                 remoteDir.replaceAll(/\\/g, "/"),
-                (err: FtpError, data: ListFile[]) => {
-                  if (err && err.code !== 450) {
+                (err: Error, data: ListingElement[]) => {
+                  if (err && (err as ClientError).code !== 450) {
                     reject(err);
                   } else {
                     resolve(

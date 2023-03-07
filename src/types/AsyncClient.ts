@@ -1,4 +1,4 @@
-import { Client, ListFile } from "ftp";
+import Client, { ListingElement } from "ftp";
 
 export interface AsyncClient extends Client {
   renameAsync: (oldName: string, newName: string) => Promise<void>;
@@ -6,5 +6,5 @@ export interface AsyncClient extends Client {
   mkdirAsync: (path: string) => Promise<void>;
   putAsync: (path: string, remotePath: string) => Promise<void>;
   deleteAsync: (path: string) => Promise<void>;
-  listAsync: (path: string) => Promise<ListFile>;
+  listAsync: (path: string) => Promise<ListingElement[]>;
 }

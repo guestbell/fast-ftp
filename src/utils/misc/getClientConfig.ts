@@ -21,7 +21,7 @@ export const getClientConfig = (): ClientConfig => {
     host: process.env.FTP_HOST,
     user: process.env.FTP_USERNAME,
     password: process.env.FTP_PASSWORD,
-    port: process.env.FTP_PORT ?? 21,
+    port: process.env.FTP_PORT ? Number(process.env.FTP_PORT) : 21,
     secure: process.env.FTP_SECURE ?? false,
   };
 };

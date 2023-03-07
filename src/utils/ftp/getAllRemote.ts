@@ -1,11 +1,11 @@
 import { AsyncClient } from "../../types";
 import { join } from "path";
-import { ListFile } from "ftp";
+import { ListingElement } from "ftp";
 
 export const getAllRemote = async (
   clients: AsyncClient[],
   remoteDir: string,
-  arrayOfFiles: ListFile[] = []
+  arrayOfFiles: ListingElement[] = []
 ) => {
   const client = clients[0];
   const files = await client.listAsync(remoteDir.replaceAll(/\\/g, "/"));

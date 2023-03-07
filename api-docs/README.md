@@ -1,3 +1,5 @@
+@guestbell/fast-ftp / [Exports](modules.md)
+
 Supercharge your ftp deployments with **fast-ftp**.
 
 ## Benchmark

@@ -1,4 +1,4 @@
-import { ClientConfig, DeployConfig } from "../types";
+import { ClientConfig, ClientError, DeployConfig } from "../types";
 import { deleteDirectory, uploadDirectory, getClients } from "../utils";
 
 export async function deploy(
@@ -24,7 +24,7 @@ export async function deploy(
         await client.mkdirAsync(tempRoot);
         console.log("Successfully created '" + tempRoot + "'.");
       } catch (err) {
-        if (err.code !== 550) {
+        if ((err as ClientError).code !== 550) {
           console.error("Error when creating '" + tempRoot + "'.");
           throw err;
         }

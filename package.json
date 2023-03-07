@@ -1,25 +1,29 @@
 {
-  "name": "fast-ftp",
+  "name": "@guestbell/fast-ftp",
   "version": "1.0.0",
-  "description": "Deploy static websites to ftp blazingly fast",
+  "description": "Supercharge your ftp deployments",
   "main": "index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "api-docs": "typedoc --plugin typedoc-plugin-markdown --out api-docs src/index.ts",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs",
     "build": "rollup -c",
     "version:patch": "npm version patch",
     "push:git": "git push --tags origin main --quiet",
     "commit:build": "git add . && git commit -m \"Deploy commit\" --quiet && npm run push:git || true",
     "create:patch": "npm run version:patch && npm run push:git",
-    "deploy": "npm run api-docs && npm run build && npm run build-storybook && npm run commit:build && npm publish && npm run create:patch"
+    "deploy": "npm run api-docs && npm run build && npm run commit:build && npm publish && npm run create:patch"
   },
   "keywords": [
     "ftp",
     "static",
     "fast"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guestbell/fast-ftp.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-react": "^7.18.6",
@@ -28,6 +32,8 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/babel__core": "^7.20.0",
+    "@types/ftp": "^0.3.33",
+    "@types/minimist": "^1.2.2",
     "babel-loader": "^8.3.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
@@ -39,6 +45,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
     "typedoc": "^0.23.24",
     "typedoc-plugin-markdown": "^3.14.0",
     "typescript": "^4.9.4"
@@ -49,5 +56,8 @@
     "minimist": "^1.2.8"
   },
   "author": "Peter Kottas",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ftp": "^0.3.10"
+  }
 }

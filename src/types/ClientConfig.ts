@@ -1,4 +1,3 @@
-import {ClientOptions} from 'ftp';
+import { Options } from "ftp";
 
-export interface ClientConfig extends ClientOptions {
-}
+export interface ClientConfig extends Options {}
