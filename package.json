@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "api-docs": "typedoc --plugin typedoc-plugin-markdown --out api-docs src/index.ts",
+    "api-docs": "typedoc --plugin typedoc-plugin-markdown --out api-docs src/lib.ts",
     "build": "rollup -c",
     "version:patch": "npm version patch",
     "push:git": "git push --tags origin main --quiet",
@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@babel/preset-react": "^7.18.6",
     "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^11.0.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -41,7 +41,6 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^5.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-scss": "^4.0.0",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
