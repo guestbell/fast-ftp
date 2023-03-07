@@ -5,6 +5,7 @@
   "main": "index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "private": false,
   "scripts": {
     "test": "jest",
     "api-docs": "typedoc --plugin typedoc-plugin-markdown --out api-docs src/lib.ts",
