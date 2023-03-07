@@ -2,9 +2,12 @@
   "name": "@guestbell/fast-ftp",
   "version": "1.0.1",
   "description": "Supercharge your ftp deployments",
-  "main": "index.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/lib.js",
+  "module": "dist/lib.es.js",
+  "types": "dist/lib.d.ts",
+  "bin": {
+    "fast-ftp": "dist/index.js"
+  },
   "private": false,
   "scripts": {
     "test": "jest",
