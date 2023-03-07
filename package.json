@@ -1,0 +1,25 @@
+{
+  "name": "fast-ftp",
+  "version": "1.0.0",
+  "description": "Deploy static websites to ftp blazingly fast",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ftp",
+    "static",
+    "fast"
+  ],
+  "devDependencies": {
+    "eslint": "8.33.0",
+    "typescript": "4.9.5"
+  },
+  "dependecies": {
+    "dotenv": "^16.0.3",
+    "ftp": "^0.3.10",
+    "minimist": "^1.2.8"
+  },
+  "author": "Peter Kottas",
+  "license": "MIT"
+}
