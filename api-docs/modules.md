@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/utils/ftp/deleteDirectories.ts:3](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/deleteDirectories.ts#L3)
+[src/utils/ftp/deleteDirectories.ts:3](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/deleteDirectories.ts#L3)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/deleteDirectory.ts:6](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/deleteDirectory.ts#L6)
+[src/utils/ftp/deleteDirectory.ts:6](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/deleteDirectory.ts#L6)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/deleteFiles.ts:3](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/deleteFiles.ts#L3)
+[src/utils/ftp/deleteFiles.ts:3](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/deleteFiles.ts#L3)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/core/deploy.ts:4](https://github.com/guestbell/fast-ftp/blob/8057586/src/core/deploy.ts#L4)
+[src/core/deploy.ts:4](https://github.com/guestbell/fast-ftp/blob/741530d/src/core/deploy.ts#L4)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/getAllDirDirs.ts:3](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/fs/getAllDirDirs.ts#L3)
+[src/utils/fs/getAllDirDirs.ts:3](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/fs/getAllDirDirs.ts#L3)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/getAllDirFiles.ts:4](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/fs/getAllDirFiles.ts#L4)
+[src/utils/fs/getAllDirFiles.ts:4](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/fs/getAllDirFiles.ts#L4)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/getAllRemote.ts:5](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/getAllRemote.ts#L5)
+[src/utils/ftp/getAllRemote.ts:5](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/getAllRemote.ts#L5)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/getClientConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/misc/getClientConfig.ts#L3)
+[src/utils/misc/getClientConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/misc/getClientConfig.ts#L3)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/getClients.ts:5](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/getClients.ts#L5)
+[src/utils/ftp/getClients.ts:5](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/getClients.ts#L5)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/getDeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/misc/getDeployConfig.ts#L4)
+[src/utils/misc/getDeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/misc/getDeployConfig.ts#L4)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/sortFilesBySize.ts:3](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/fs/sortFilesBySize.ts#L3)
+[src/utils/fs/sortFilesBySize.ts:3](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/fs/sortFilesBySize.ts#L3)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadDirectories.ts:4](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/uploadDirectories.ts#L4)
+[src/utils/ftp/uploadDirectories.ts:4](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/uploadDirectories.ts#L4)
 
 ___
 
@@ -288,7 +288,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadDirectory.ts:6](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/uploadDirectory.ts#L6)
+[src/utils/ftp/uploadDirectory.ts:6](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/uploadDirectory.ts#L6)
 
 ___
 
@@ -311,4 +311,4 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadFiles.ts:5](https://github.com/guestbell/fast-ftp/blob/8057586/src/utils/ftp/uploadFiles.ts#L5)
+[src/utils/ftp/uploadFiles.ts:5](https://github.com/guestbell/fast-ftp/blob/741530d/src/utils/ftp/uploadFiles.ts#L5)
