@@ -78,9 +78,9 @@ fast-ftp --remote-root=/sub/example --local-root=/path-to-published
 
 We provide accelerated ftp functions and helpers you can use in your pipeline or node-js projects.
 
-General idea is you first use **getClients** function to obtain an array of ftp-clients (connections). These are then passed to other functions. Check the [main deployment script](pathToDeployTs) as an example.
+General idea is you first use **getClients** function to obtain an array of ftp-clients (connections). These are then passed to other functions. Check the [main deployment script](https://github.com/guestbell/fast-ftp/blob/main/src/core/deploy.ts) as an example.
 
-Full api docs [here](pathToApi)
+Full api docs [here](https://github.com/guestbell/fast-ftp/blob/main/api-docs/modules.md)
 
 ## Created and sponsored by
 
