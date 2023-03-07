@@ -1,6 +1,6 @@
 {
   "name": "@guestbell/fast-ftp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Supercharge your ftp deployments",
   "main": "index.js",
   "module": "dist/index.es.js",
