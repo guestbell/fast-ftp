@@ -4,11 +4,11 @@ Supercharge your ftp deployments with **fast-ftp**.
 
 Uploading [guestbell.com](https://guestbell.com) - ~500 files, 27 directories some 5 levels deep
 
-                       | Time taken |   Improvement
-
-[basic-ftp](path-to-) | 213s | 1212x
-[ftp-deploy](path-to-) | 197s | 123x
-[fast-ftp](path-to-) | 22s | 1x
+|                                                       | Time taken    | Improvement  |
+| :---:                                                 | :---:         | :---:        |
+| [basic-ftp](https://www.npmjs.com/package/basic-ftp)  | 217sec        | 10x          |
+| [ftp-deploy](https://www.npmjs.com/package/ftp-deploy)| 197sec        | 9x           |
+| **fast-ftp**                                          | 22sec         | 1x           |
 
 ## Why is it fast?
 
