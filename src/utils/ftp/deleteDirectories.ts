@@ -1,10 +1,11 @@
-import { AsyncClient } from "../../types";
+import { AsyncClient, ClientError } from "../../types";
+import { dirTreeToParallelBatches, getDirTree, ItemPool } from "../misc";
 
 export const deleteDirectories = async (
-  clients: AsyncClient[],
+  clientPool: ItemPool<AsyncClient>,
   allDirs: string[]
 ) => {
-  allDirs.sort((a, b) => {
+  /*allDirs.sort((a, b) => {
     const aNumSlashes = a.split("/").length;
     const bNumSlashes = b.split("/").length;
 
@@ -18,5 +19,30 @@ export const deleteDirectories = async (
         throw err;
       }
     });
+  }*/
+  const tree = getDirTree(allDirs);
+  const parallel = dirTreeToParallelBatches(tree);
+  for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
+    const batch = parallel[batchIndex];
+    const filesPromises: Promise<void>[] = [];
+    for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
+      const dir = batch[dirIndex];
+      console.log("Deleting directory: ", dir);
+      const client = await clientPool.acquire();
+      filesPromises.push(
+        client
+          .rmdirAsync(dir)
+          .catch((err) => {
+            if ((err as ClientError).code !== 550) {
+              console.error("Error deleting directory ", dir, err);
+            }
+            throw err;
+          })
+          .finally(() => {
+            clientPool.release(client);
+          })
+      );
+    }
+    await Promise.all(filesPromises);
   }
 };

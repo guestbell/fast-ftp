@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Disallow: /
+
+# Host
+Host: https://stg.guestbell.com
+
+# Sitemaps
+Sitemap: https://stg.guestbell.com/sitemap.xml

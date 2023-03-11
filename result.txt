@@ -1,0 +1,7 @@
+| Function | Average Time (ms) | Max Time (ms) | Min Time (ms) | Avg Time vs shortest | Min Time vs shortest | Max Time vs shortest |
+| --- | --- | --- | --- | --- |
+| ftp | 98489.50ms | 104750.00ms | 92229.00ms | 5.23 | 4.91 | 5.54 |
+| basic-ftp | 88227.00ms | 98673.00ms | 77781.00ms | 4.68 | 4.14 | 5.22 |
+| ftp-deploy | 140881.00ms | 141474.00ms | 140288.00ms | 7.48 | 7.47 | 7.48 |
+| promise-ftp | 124778.00ms | 132270.00ms | 117286.00ms | 6.62 | 6.25 | 6.99 |
+| fast-ftp | 18842.50ms | 18917.00ms | 18768.00ms | 1.00 | 1.00 | 1.00 |

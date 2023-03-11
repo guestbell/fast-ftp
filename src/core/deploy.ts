@@ -1,55 +1,76 @@
 import { ClientConfig, ClientError, DeployConfig } from "../types";
-import { deleteDirectory, uploadDirectory, getClients } from "../utils";
+import { resolve } from "path";
+import {
+  deleteDirectory,
+  uploadDirectory,
+  getClients,
+  ItemPool,
+} from "../utils";
 
 export async function deploy(
   deployConfig: DeployConfig,
   clientConfig: ClientConfig
 ) {
-  const { remoteRoot, tempRoot, oldRoot, localRoot } = deployConfig;
+  const {
+    remoteRoot,
+    tempRoot,
+    oldRoot,
+    localRoot,
+    concurrency = 16,
+  } = deployConfig;
 
-  const clients = await getClients(15, clientConfig);
+  const clients = await getClients(concurrency, clientConfig);
+  const clientPool = new ItemPool(clients);
   const client = clients[0];
 
-  console.log("Starting to delete '" + oldRoot + "'.");
+  console.log(`Using ${clients.length} connections.`);
 
   // Delete existing old deployment
-  return deleteDirectory(clients, oldRoot)
-    .then(() => {
-      console.log("Starting to delete '" + tempRoot + "'.");
-      // Delete existing temp deployment
-      return deleteDirectory(clients, tempRoot);
-    })
+  return new Promise<void>(async (resolve) => {
+    console.log("Starting to delete '" + tempRoot + "'.");
+    console.log("Starting to delete '" + oldRoot + "'.");
+    const deleteTmp = deleteDirectory(clientPool, tempRoot);
+    const deleteOld = deleteDirectory(clientPool, oldRoot);
+    await Promise.all([deleteTmp, deleteOld]);
+    resolve();
+  })
     .then(async () => {
       try {
+        console.log("Starting to create '" + tempRoot + "'.");
         await client.mkdirAsync(tempRoot);
-        console.log("Successfully created '" + tempRoot + "'.");
       } catch (err) {
-        if ((err as ClientError).code !== 550) {
-          console.error("Error when creating '" + tempRoot + "'.");
+        if (err && (err as ClientError).code !== 550) {
+          console.error("Error when creating '" + tempRoot + "'.", err);
           throw err;
         }
       }
     })
     .then(() => {
       console.log("Starting to upload.");
-      const outTotalPath = __dirname + localRoot;
-      return uploadDirectory(clients, tempRoot, outTotalPath);
+      const outTotalPath = resolve(localRoot);
+      return uploadDirectory(clientPool, tempRoot, outTotalPath);
     })
     .then(async () => {
       try {
-        await client.renameAsync(remoteRoot, oldRoot);
-        console.log("Renamed '" + remoteRoot + "' => '" + oldRoot + "'.");
-      } catch (err) {
-        console.error(
-          "Error when renaming '" + remoteRoot + "' => '" + oldRoot + "'."
+        console.log(
+          "Starting to rename '" + remoteRoot + "' => '" + oldRoot + "'."
         );
-        throw err;
+        await client.renameAsync(remoteRoot, oldRoot);
+      } catch (err) {
+        if (err && (err as ClientError).code !== 550) {
+          console.error(
+            "Error when renaming '" + remoteRoot + "' => '" + oldRoot + "'."
+          );
+          throw err;
+        }
       }
     })
     .then(async () => {
       try {
+        console.log(
+          "Starting to rename '" + tempRoot + "' => '" + remoteRoot + "'."
+        );
         await client.renameAsync(tempRoot, remoteRoot);
-        console.log("Renamed '" + tempRoot + "' => '" + remoteRoot + "'.");
       } catch (err) {
         console.error(
           "Error when renaming " + tempRoot + "' => '" + remoteRoot + "'."
@@ -59,7 +80,7 @@ export async function deploy(
     })
     .then(() => {
       console.log("Starting to delete '" + oldRoot + "'.");
-      return deleteDirectory(clients, oldRoot);
+      return deleteDirectory(clientPool, oldRoot);
     })
     .finally(() => {
       clients.forEach((client) => {

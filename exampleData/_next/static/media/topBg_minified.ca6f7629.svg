@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg style="z-index:100000" preserveAspectRatio="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="k">
+<stop stop-color="#15d5ce" stop-opacity=".2" offset="0"/>
+<stop stop-color="#15d5ce" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="j">
+<stop stop-color="#51d2f0" stop-opacity=".2" offset="0"/>
+<stop stop-color="#51d2f0" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="i">
+<stop stop-color="#bdcaff" stop-opacity=".2" offset="0"/>
+<stop stop-color="#bdcaff" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="h">
+<stop stop-color="#939ff9" stop-opacity=".2" offset="0"/>
+<stop stop-color="#939ff9" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="g">
+<stop stop-color="#d4afeb" stop-opacity=".2" offset="0"/>
+<stop stop-color="#d4afeb" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="f">
+<stop stop-color="#dfa9ff" stop-opacity=".2" offset="0"/>
+<stop stop-color="#dfa9ff" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="e">
+<stop stop-color="#ffa9ee" stop-opacity=".2" offset="0"/>
+<stop stop-color="#ffa9ee" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="d">
+<stop stop-color="#b1a9ff" stop-opacity=".2" offset="0"/>
+<stop stop-color="#b1a9ff" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="c">
+<stop stop-color="#a9daff" stop-opacity=".2" offset="0"/>
+<stop stop-color="#a9daff" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="b">
+<stop stop-color="#81efff" stop-opacity=".2" offset="0"/>
+<stop stop-color="#81efff" stop-opacity="0" offset="1"/>
+</radialGradient>
+<radialGradient id="a">
+<stop stop-color="#eef6f6" offset="0"/>
+<stop stop-color="rgba(255, 255, 255, 0)" stop-opacity="0" offset="1"/>
+</radialGradient>
+</defs>
+<ellipse cx="45" cy="25" rx="32" ry="16" fill="url(#k)"/>
+<ellipse cx="25" cy="80" rx="10" ry="28" fill="url(#j)"/>
+<ellipse cx="35" cy="25" rx="20" ry="17" fill="url(#i)"/>
+<ellipse cx="60" cy="82" rx="32" ry="20" fill="url(#h)"/>
+<ellipse cx="45" cy="75" rx="37" ry="15" fill="url(#g)"/>
+<ellipse cx="55" cy="80" rx="11" ry="15" fill="url(#f)"/>
+<ellipse cx="60" cy="20" rx="20" ry="13" fill="url(#e)"/>
+<ellipse cx="65" cy="20" rx="28" ry="12" fill="url(#d)"/>
+<ellipse cx="70" cy="32" rx="37" ry="22" fill="url(#c)"/>
+<ellipse cx="75" cy="38" rx="20" ry="13" fill="url(#b)"/>
+<polygon points="60 0 0 50 0 100 100 100 100 0" fill="url(#a)"/>
+</svg>

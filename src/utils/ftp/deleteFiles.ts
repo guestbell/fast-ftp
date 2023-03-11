@@ -1,30 +1,32 @@
 import { AsyncClient } from "../../types";
+import { ItemPool } from "../misc";
 
 export const deleteFiles = async (
-  clients: AsyncClient[],
+  clientPool: ItemPool<AsyncClient>,
   allFiles: string[]
 ) => {
   const totalLength = allFiles.length;
-  const clientsCount = Math.min(clients.length, totalLength);
   let filesPromises: Promise<void>[] = [];
   let count = 0;
   const failedFiles: string[] = [];
-  for (let index = 0; index < clientsCount; index++) {
-    filesPromises = filesPromises.concat([
-      new Promise(async (resolve, reject) => {
-        const client = clients[index];
-        for (let j = index; j < totalLength; j += clientsCount) {
-          const file = allFiles[j];
-          await client.deleteAsync(file).catch((err) => {
-            console.error("Error uploading a file: ", err);
+  for (let j = 0; j < totalLength; j++) {
+    const file = allFiles[j];
+    const client = await clientPool.acquire();
+    filesPromises.push(
+      client
+        .deleteAsync(file)
+        .catch((err) => {
+          if (err.code !== 550) {
+            console.error("Error deleting a file: ", file, err);
             failedFiles.push(file);
-          });
-          count++;
-          console.log(`Deleting ${count}/${totalLength}...`);
-        }
-        resolve();
-      }),
-    ]);
+          }
+        })
+        .finally(() => {
+          clientPool.release(client);
+        })
+    );
+    count++;
+    console.log(`Deleting files ${count}/${totalLength}...`);
   }
   await Promise.all(filesPromises);
   if (failedFiles.length) {

@@ -1,0 +1,270 @@
+{
+  "common": {
+    "buttons": {
+      "close": "Cerrar",
+      "getStarted": "Empezar",
+      "nextSlide": "La siguiente diapositiva",
+      "previousSlide": "Diapositiva anterior",
+      "send": "Enviar"
+    },
+    "meta": {
+      "description": "Mejore la experiencia de sus huéspedes con GuestBell, la aplicación de hotel todo en uno para hoteles, alquileres de vacaciones y más. Simplifique sus operaciones, aumente las reseñas y mejore la satisfacción de los huéspedes con GuestBell.",
+      "keywords": "aplicación movil para hoteles, servicio de habitaciones en línea, smart hotel, app “white label operator” (“WLO”)",
+      "priceSpecification": "Por 1er pedido/mensaje de chat",
+      "title": "GuestBell - La mejor app de hotel y servicio de habitaciones en línea"
+    },
+    "schema": {
+      "organizationDescription": "GuestBell es una plataforma de gestión de la experiencia de los huéspedes todo en uno diseñada para simplificar las operaciones y mejorar la satisfacción de los huéspedes en hoteles, alquileres vacacionales y otros negocios de hostelería. Con funciones como el servicio de habitaciones en línea, la comunicación automatizada con los huéspedes y las experiencias de registro personalizadas, Guestbell ayuda a las empresas a optimizar sus operaciones, mejorar la participación de los huéspedes y aumentar los ingresos. Al proporcionar una experiencia de huésped digital y fluida, Guestbell ayuda a las empresas a obtener más críticas positivas, atraer nuevos huéspedes y generar lealtad a largo plazo."
+    }
+  },
+  "components": {
+    "bookDemoButton": {
+      "text": "Reservar demo"
+    },
+    "cookieBanner": {
+      "body": "Este sitio web utiliza cookies para proporcionar una mejor experiencia y funcionalidad al usuario. Si continúa navegando por el sitio, acepta nuestro <0>uso de cookies</0>"
+    },
+    "exitSalesModal": {
+      "bodyEmail": "Comparte tu correo electrónico y nos pondremos en contacto.",
+      "submittedBody": "Nos pondremos en contacto contigo pronto. Puedes mirar mientras tanto",
+      "submittedTitle": "🥳 ¡Gracias!",
+      "title": "¿Quieres saber más y obtener un cupón de $25?"
+    },
+    "guestAppLinkToast": {
+      "message": "Volver a la App"
+    },
+    "hideString": {
+      "show": "Revelar"
+    },
+    "translationWarning": {
+      "text": "Este texto fue traducido exclusivamente para su conveniencia. Nosotros, como empresa, no somos responsables de los errores de traducción que puedan llevar a que usted malinterprete este documento legal. Para fines legales, vuelva a <0>VERSIÓN EN INGLÉS</0>. Gracias por entender.",
+      "title": "Advertencia de traducción"
+    }
+  },
+  "pages": {
+    "blog": {
+      "metaDescription": "Obtenga las últimas noticias y artículos escritos por expertos en el sector de la hospitalidad. Nos centramos en las tecnologías modernas y el valor que pueden aportar a su negocio.",
+      "metaTitle": "Escribimos sobre hostelería",
+      "metaTitlePrefix": "GuestBell Blog - "
+    },
+    "home": {
+      "app": {
+        "body": "#notificaciones-push #venta-adicional #POS #página-inicio #promociones #chat-en-línea #inventario #analítica #multiidiomas #integraciones #reseñas #chat-bot #propinas #chat-agentes #mensajería-masiva #no-más-imprimir #white-label #open-api"
+      },
+      "business": {
+        "feature1text": "Gane más con la venta de servicios adicionales, impulse sus reservas en linea.",
+        "feature1title": "Ingresos",
+        "feature2text": "Únase a los hoteles que ya usan el chat en línea para resolver problemas de manera más rápida y sencilla.",
+        "feature2title": "Reseñas",
+        "feature3text": "Cambie precios, branding o información fácilmente sin reimprimir.",
+        "feature3title": "Flexibilidad",
+        "feature4text": "Los pedidos y las preguntas siempre llegarán al empleado adecuado.",
+        "feature4title": "Eficiencia",
+        "title": "Impulsa tu negocio con <0>App para Hoteles</0>"
+      },
+      "demoHotel": {
+        "leadButton": "Ver Demo Hotel App"
+      },
+      "featuresShowcase": {
+        "feature1Body": "Actualice sus folletos en papel a la página de inicio digital de GuestBell. Comparta actualizaciones y promociones especiales al instante, sin las limitaciones del papel.",
+        "feature1Title": "Página principal",
+        "feature2Body": "Moderniza tu servicio de habitaciones con GuestBell. Reservas, alquileres, venta adicional y gestión de inventario, todo en el móvil de tus huéspedes.",
+        "feature2Title": "Pedidos en línea",
+        "feature3Body": "Conéctese convenientemente con los huéspedes mediante el sistema de chat de GuestBell, disponible dentro y fuera del hotel.",
+        "feature3Title": "Mensajería",
+        "feature4Body": "GuestBell ofrece revisiones de pedidos individuales, lo que lo ayuda a identificar y resolver problemas antes de que se conviertan en revisiones negativas de OTA.",
+        "feature4Title": "Reseñas",
+        "title": "Conserje <0>en línea</0> GuestBell"
+      },
+      "founder": {
+        "body": "Utilizamos tecnología innovadora para revolucionar la industria de la hospitalidad y brindar experiencias increíbles a huéspedes y hoteleros de todo el mundo. No importa cuáles sean sus necesidades, objetivos o presupuesto, tenemos una solución para usted.",
+        "title": "Nuestra <0>Visión</0> para la hospitalidad"
+      },
+      "guestAppImageAlt": "Solicitud de invitado GuestBell",
+      "guestFeatures": {
+        "feature1text": "Proporcione información valiosa en el idioma que los huéspedes entiendan.",
+        "feature1title": "Multilingüe",
+        "feature2text": "Funciona en todos los dispositivos, no es necesario descargar la app para invitados.",
+        "feature2title": "Acceso instantáneo",
+        "feature3text": "Manera conveniente, inteligente y fácil de conectar.",
+        "feature3title": "Mensajería",
+        "feature4text": "Forma irresistible de vender y promocionar servicios.",
+        "feature4title": "Pedidos en línea",
+        "imageAlt": "Destaques de la App para Huéspedes",
+        "subTitle": "Destaques de la App para Huéspedes",
+        "title": "<0>Opción</0> popular"
+      },
+      "hotelFeatures": {
+        "feature1text": "Mantén todo actualizado con folletos, menús y branding digitales. Nunca más imprimas de nuevo.",
+        "feature1title": "Todo en un lugar",
+        "feature2text": "Recopile fácilmente las opiniones de los huéspedes que lo ayudarán a brindar un mejor servicio.",
+        "feature2title": "Reseñas",
+        "feature3text": "Aumente los ingresos y la eficiencia mediante el uso de inteligencia comercial.",
+        "feature3title": "Analítica",
+        "feature4text": "Optimice sus operaciones con el check-in en línea, el chatbot y las integraciones.",
+        "feature4title": "Automatizar",
+        "imageAlt": "Características del panel",
+        "subTitle": "Aspectos destacados del panel",
+        "title": "<0>Moderna</0>  Hotel App"
+      },
+      "howItWorks": {
+        "body": "3 opciones para una experiencia perfecta. No es necesario descargar la aplicación del hotel ni crear una cuenta.",
+        "feature1text": "Ponga un hermoso volante en las habitaciones, áreas comunes o en la recepción. Los invitados simplemente escanean el código QR y comienzan a ordenar de inmediato.",
+        "feature1title": "Volantes",
+        "feature2text": "Enviado automáticamente cuando se agrega un huesped al sistema. Recuerda que también podemos conseguir contacto del usuario desde tu PMS vía integración.",
+        "feature2title": "Email/SMS",
+        "feature3text": "Puede vincular GuestBell a cualquier pagina o link. Este enlace puede enviarse por correo electrónico/whatsapp o colocarse en su sitio web.",
+        "feature3title": "Enlace profundo",
+        "mainImageAlt": "Folleto de check-in en GuestBell",
+        "subTitle": "Sencillo para huéspedes & personal",
+        "title": "Invitado <0>amigable</0>"
+      },
+      "integrations": {
+        "channelManager": "Gerente de Canal",
+        "inputPlaceholder": "Encuentra tu sistema",
+        "label": "Encuentra integración",
+        "notFoundButton": "Habla con nosotros",
+        "notFoundText": "Tienes suerte! GuestBell funciona perfectamente incluso sin integrarse con tu PMS. También agregamos integraciones a demanda con frecuencia. Simplemente dime qué sistemas estás usando y lo arreglaremos para ti.",
+        "notFoundTitle": "¿No encontraste lo que estabas buscando?",
+        "pms": "Sistema de gestión de la propiedad",
+        "text": "Optimice su flujo de trabajo mediante la integración con su sistema. GuestBell está conectado a muchos PMS utilizados mundialmente, lo que nos permite conectarnos con el 100% de los clientes de los hoteles.",
+        "title": "Integraciones Suaves"
+      },
+      "leadButton": "<strong>Obtener GuestBell</strong> Es gratis",
+      "marketingVideo": {
+        "title": "Ideal para <br/><0>Hoteles, Villas, Retiros, Resorts, Posadas, B&Bs</0>"
+      },
+      "metaTitle": "GuestBell - La Mejor App y Servicio Habitaciones en línea",
+      "readyToStart": {
+        "body": "Explore nuestra <0>documentación</0> o cree una cuenta al instante y comience a atender a sus huespedes. También puede contactarnos si necesita más ayuda.",
+        "integrationsBody": "Cree su propia integración personalizada. Nuestros expertos están aquí para ayudarte.",
+        "integrationsCta": "Referencia de API",
+        "integrationsTitle": "Integre con cualquier cosa",
+        "pricingBody": "Estamos aquí para ayudar. Sólo háganoslo saber y le explicaremos todo.",
+        "pricingCta": "Háblanos",
+        "pricingTitle": "¿Más preguntas?",
+        "title": "¿Listo para comenzar?"
+      },
+      "testimonials": {
+        "currentStats": {
+          "checkIns": "Huéspedes",
+          "hotels": "Hoteles",
+          "messages": "Mensajes",
+          "orders": "Pedidos"
+        },
+        "title": "Únete a la revolución de la hospitalidad"
+      },
+      "walkthrough": {
+        "step1body": "Solo toma unos segundos crear su aplicación gratuita de servicio a la habitación. Simplemente escribe el nombre de tu hotel y nosotros nos encargamos del resto.",
+        "step1title": "Crear una cuenta",
+        "step2body": "Pon todo lo que quieras vender en GuestBell. Sus huespedes podrán comprarlo/reservarlo/alquilarlo fácilmente a través de la aplicación.",
+        "step2title": "Configurar",
+        "step3body": "<p>Elija cómo sus huespedes acceden a GuestBell. Haciendo clic en una URL, escaneando un código QR en la habitación, usando un enlace en un correo electrónico/sms o una combinación de estos.</p><p>Sus huespedes nunca tendrán que descargar la aplicación o iniciar sesión antes de realizar el pedido. </p>",
+        "step3title": "Primer check-in",
+        "step4body": "GuestBell admite varios idiomas para que sus huéspedes se sientan como en casa. Pueden comunicarse, ordenar y acceder a la información más fácilmente que nunca.",
+        "step4title": "Usar la aplicación de hoteles",
+        "title": "¿Cómo obtener la aplicación de tu hotel?"
+      }
+    },
+    "homeNew": {
+      "body": "Todo lo que tus invitados necesitan en su smartphone. Registro en línea, servicio de habitaciones, chat, folleto, reseñas - en un clic",
+      "callToAction": "<strong>Obtener GuestBell</strong> Es gratis",
+      "leadBgAlt": "Imagen de fondo sutil",
+      "title2": "Descarga <br/><0>Hotel App</0> definitiva hoy"
+    },
+    "pageNotFound": {
+      "button": "Navegar en tu página inicio",
+      "metaTitle": "GuestBell - Página no encontrada",
+      "title": "Página no encontrada"
+    },
+    "pricing": {
+      "benefits": {
+        "b1": "Cancele en cualquier momento",
+        "b2": "Integre con su PMS",
+        "b3": "Tutoriales interactivos",
+        "b4": "Increíble soporte al cliente",
+        "b5": "Flyer promocional QR personalizado",
+        "b6": "Solicitar funciones personalizadas"
+      },
+      "benefitsTitle": "Beneficios Extra",
+      "faq": {
+        "deletePlanText": "No es necesario eliminar su propiedad si espera un período bajo de huespedes, ya que solo le facturamos cuando su huesped abre la aplicación. Sin embargo, si desea cerrar definitivamente, es muy fácil hacerlo, simplemente navegue a los planes en su tablero y siga las instrucciones.",
+        "deletePlanTitle": "¿Cómo puedo borrar mi propiedad?",
+        "helpSetUpText": "Trabajar con GuestBell es extremadamente simple. Diseñamos y probamos cada página para asegurarnos de que sea fácil trabajar con ella. También hay una serie de información sobre herramientas, videos y un recorrido interactivo para ayudarlo. Si aún encuentra un problema, simplemente envíenos un mensaje y estaremos encantados de ayudarle.",
+        "helpSetUpTitle": "¿Pueden ayudarme a configurar la aplicación de mi hotel?",
+        "howOftenPayText": "Te cobramos todos los meses, solo por los check-ins a los que acceden tus huespedes en su aplicación web. No le cobraremos nada si ningún huesped abrió la aplicación en el mes indicado.",
+        "howOftenPayTitle": "¿Con qué frecuencia pago por GuestBell?",
+        "integrateText": "Ya nos integramos con los sistemas mas usados en la administración de propiedades. Estamos felices de agregar más a través de nuestro programa piloto. Simplemente díganos con qué sistema desea que nos integremos y trabajaremos directamente con usted para que esto suceda.",
+        "integrateTitle": "¿GuestBell se puede integrar con mi sistema?",
+        "isFreeVersionLimitedText": "No. Obtiene todas las funciones avanzadas por {{freeDays}} días. Las características son exactamente las mismas que en la versión paga. Tenga en cuenta que los clientes que pagan disfrutan de un soporte prioritario.",
+        "isFreeVersionLimitedTitle": "¿Las funciones de la versión de prueba son limitadas?",
+        "modifyPlanText": "¡Nos encanta escuchar tus ideas! La mayoría de las funciones de GuestBell comenzaron como comentarios o solicitudes de funciones de nuestros clientes. No lo dudes y comparte tu idea con nosotros.",
+        "modifyPlanTitle": "¿Puedes implementar una función para mí?",
+        "reopeningText": "Nuestra aplicación de hotel permite a los huéspedes hablar con la recepción, solicitar servicios y encontrar información sobre el hotel en línea. Esto permitirá a su personal seguir las más estrictas reglas de distanciamiento social.",
+        "reopeningTitle": "¿Cómo ayuda la aplicación del hotel a reabrir el hotel después de Covid-19?",
+        "title": "Preguntas Más Frecuentes",
+        "whyPerCheckInText": "Queremos que nuestros precios sean lo más justos posible. En lugar de cobrar una cantidad fija cada mes, solo cobramos a los clientes que realmente usaron la aplicación.",
+        "whyPerCheckInTitle": "¿Por qué no cobras una cuota mensual?"
+      },
+      "interactive": {
+        "card": {
+          "allFromFree": "Todo desde gratis",
+          "feature1": "Chat con Bot",
+          "feature10": "Menú del restaurante",
+          "feature11": "CMS de contenido",
+          "feature2": "Análisis & Reseñas",
+          "feature3": "Check-in en línea",
+          "feature4": "Página de inicio",
+          "feature5": "Pedidos y Upselling",
+          "feature6": "Seguimiento de inventario",
+          "feature7": "Plurilingüe",
+          "feature8": "Los servicios en App",
+          "feature9": "Hotel App de marca",
+          "includesFeatures": "Incluye:",
+          "noHiddenCost": "Sin costo oculto",
+          "perGuest": "por 1er pedido/mensaje",
+          "pricingExample": "Ejemplo de precios",
+          "pricingExampleBody": "100 huéspedes visitan su hotel en un mes determinado. 50 de ellos abren la aplicación (que está disponible en línea, por lo que no es necesario instalarla en el teléfono inteligente de su invitado). De estos 50, 10 decidirán si realizar un pedido o enviar un mensaje de chat. Independientemente de la cantidad de pedidos o mensajes, pagará 10*0,99 = USD 9,90 por ese mes. Si el hotel recibe 0 huéspedes (por ejemplo, debido a las restricciones de covid), no tendrás que pagar nada.",
+          "starText": "<0>Ejemplo de precios</0>",
+          "startFree": "Empezar Ahora",
+          "titleFree": "Siempre libre",
+          "titleSmall": "Pago por uso"
+        },
+        "noMinimum": "Se ajusta a tus necesidades",
+        "subTitleFree": "La única Hotel App gratuita"
+      },
+      "metaDescription": "Elija el plan de precios adecuado para su hotel. Obtenga una aplicación de hotel gratuita con nuestro plan gratuito y elija Pay As You Go que escala con su negocio. Descubra el plan que funciona para usted y comience a usar GuestBell hoy.",
+      "metaTitle": "GuestBell - La Aplicación de Hotel más asequible",
+      "title": "Gratis para probar, fácil de amar"
+    }
+  },
+  "structure": {
+    "footer": {
+      "address": "GuestBell Inc. 11 Calle Policía Nacional, Estepona, España",
+      "contact": "Contacto",
+      "contactUsViaEmail": "Contáctanos por correo electrónico",
+      "content": "Contenido",
+      "emergencyTechSupport": "Soporte técnico de emergencia",
+      "enquiries": "Consultas",
+      "followUs": "Síguenos",
+      "linkedInHref": "https://www.linkedin.com/company/85599364",
+      "mondayFriday": "Lunes - Viernes",
+      "officeHours": "Horas de oficina",
+      "onlineChat": "Chat en línea"
+    },
+    "navigation": {
+      "blog": "Blog",
+      "bookDemo": "Reservar demo",
+      "collapseNav": "Contraer navegación",
+      "cookies": "Cookies",
+      "dashboard": "Tablero",
+      "docs": "Docs",
+      "guestApp": "App",
+      "home": "Inicio",
+      "login": "Iniciar sesión",
+      "pricing": "Precios",
+      "privacy": "Intimidad",
+      "terms": "Condiciones"
+    }
+  }
+}

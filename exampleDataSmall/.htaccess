@@ -1,0 +1,73 @@
+ErrorDocument 404 /404.html
+AddDefaultCharset UTF-8
+#This is extremely important as it disables rewriting route from en => en/ and then 403-ing on directory 
+#https://stackoverflow.com/questions/28171874/mod-rewrite-how-to-prioritize-files-over-folders
+DirectorySlash Off
+DirectoryIndex index.html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # BEGIN WWW omit
+  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  RewriteRule ^ %{REQUEST_SCHEME}://%1%{REQUEST_URI} [R=301,L]
+  # END WWW omit
+  # BEGIN HTTPS redirect
+  RewriteCond %{ENV:HTTPS} !=on
+  RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+  # END HTTPS redirect
+
+  # BEGIN Omit extension
+  #remove html file extension-e.g. https://example.com/file.html will become https://example.com/file
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^([^\.]+)$ $1.html [NC,L]
+  # END Omit extension
+
+  # BEGIN File detection
+  # If an existing asset or directory is requested go to it as it is
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]  
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d  
+  RewriteRule ^ - [L]
+  # If the requested resource doesn't exist, use index.php - that file then takes care of language redirection
+  RewriteRule ^ /404.html
+  # END File detection
+</IfModule>
+
+# BEGIN Compress text files
+<IfModule mod_deflate.c>
+  <FilesMatch "\.(css|js|x?html?|php)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+</IfModule>
+# END Compress text files
+
+# BEGIN Cache
+<IfModule mod_headers.c>
+  <FilesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|svg|mp4|webp|WEBP|woff2|webp)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+
+  <FilesMatch "\\.(css)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+
+  <FilesMatch "\\.(js)$">
+    Header set Cache-Control "max-age=31536000, private"
+  </FilesMatch>
+
+  <FilesMatch "\\.(xml|txt)$">
+    Header set Cache-Control "max-age=2592000, public, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\\.(html|htm|php)$">
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "robots.txt$">
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "sw.js$">
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
+# END Cache
