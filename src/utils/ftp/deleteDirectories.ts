@@ -1,11 +1,16 @@
 import { AsyncClient, ClientError } from "../../types";
-import { dirTreeToParallelBatches, getDirTree, ItemPool } from "../misc";
+import {
+  createLoggerFromPartialConfig,
+  dirTreeToParallelBatches,
+  getDirTree,
+  ItemPool,
+} from "../misc";
+import { FtpFunctionConfig } from "../../types";
 
-export const deleteDirectories = async (
-  clientPool: ItemPool<AsyncClient>,
-  allDirs: string[]
-) => {
-  /*allDirs.sort((a, b) => {
+export const deleteDirectories =
+  (config: Partial<FtpFunctionConfig>) =>
+  async (clientPool: ItemPool<AsyncClient>, allDirs: string[]) => {
+    /*allDirs.sort((a, b) => {
     const aNumSlashes = a.split("/").length;
     const bNumSlashes = b.split("/").length;
 
@@ -20,29 +25,30 @@ export const deleteDirectories = async (
       }
     });
   }*/
-  const tree = getDirTree(allDirs);
-  const parallel = dirTreeToParallelBatches(tree);
-  for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
-    const batch = parallel[batchIndex];
-    const filesPromises: Promise<void>[] = [];
-    for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
-      const dir = batch[dirIndex];
-      console.log("Deleting directory: ", dir);
-      const client = await clientPool.acquire();
-      filesPromises.push(
-        client
-          .rmdirAsync(dir)
-          .catch((err) => {
-            if ((err as ClientError).code !== 550) {
-              console.error("Error deleting directory ", dir, err);
-            }
-            throw err;
-          })
-          .finally(() => {
-            clientPool.release(client);
-          })
-      );
+    const logger = createLoggerFromPartialConfig(config);
+    const tree = getDirTree(allDirs);
+    const parallel = dirTreeToParallelBatches(tree);
+    for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
+      const batch = parallel[batchIndex];
+      const filesPromises: Promise<void>[] = [];
+      for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
+        const dir = batch[dirIndex];
+        logger.verbose("Deleting directory: " + dir);
+        const client = await clientPool.acquire();
+        filesPromises.push(
+          client
+            .rmdirAsync(dir)
+            .catch((err) => {
+              if ((err as ClientError).code !== 550) {
+                logger.error("Error deleting directory " + dir, err);
+              }
+              throw err;
+            })
+            .finally(() => {
+              clientPool.release(client);
+            })
+        );
+      }
+      await Promise.all(filesPromises);
     }
-    await Promise.all(filesPromises);
-  }
-};
+  };

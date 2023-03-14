@@ -1,8 +1,12 @@
 import { deploy } from "./core";
-import { getClientConfig, getDeployConfig } from "./utils";
+import {
+  getClientConfig,
+  getDeployConfig,
+  getFtpFunctionConfig,
+} from "./utils";
 
 console.time("Deployment");
-deploy(getDeployConfig(), getClientConfig())
+deploy(getDeployConfig(), getClientConfig(), getFtpFunctionConfig())
   .then(() => {
     process.exit();
   })

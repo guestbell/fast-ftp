@@ -1,16 +1,18 @@
 import { getAllDirDirs, getAllDirFiles } from "../fs";
-import { AsyncClient } from "../../types/AsyncClient";
+import { AsyncClient, FtpFunctionConfig } from "../../types";
 import { uploadFiles } from "./uploadFiles";
 import { uploadDirectories } from "./uploadDirectories";
 import { ItemPool } from "../misc";
 
-export async function uploadDirectory(
-  clientsPool: ItemPool<AsyncClient>,
-  remoteDir: string,
-  localDir: string
-) {
-  let allFiles = getAllDirFiles(localDir, []);
-  const allDirs = getAllDirDirs(localDir, []);
-  await uploadDirectories(clientsPool, allDirs, localDir, remoteDir);
-  await uploadFiles(clientsPool, allFiles, localDir, remoteDir);
-}
+export const uploadDirectory =
+  (config: Partial<FtpFunctionConfig>) =>
+  async (
+    clientsPool: ItemPool<AsyncClient>,
+    remoteDir: string,
+    localDir: string
+  ) => {
+    let allFiles = getAllDirFiles(localDir, []);
+    const allDirs = getAllDirDirs(localDir, []);
+    await uploadDirectories(config)(clientsPool, allDirs, localDir, remoteDir);
+    await uploadFiles(config)(clientsPool, allFiles, localDir, remoteDir);
+  };

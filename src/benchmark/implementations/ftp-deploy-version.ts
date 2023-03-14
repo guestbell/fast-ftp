@@ -1,6 +1,6 @@
 import { Client } from "basic-ftp";
 import FtpDeploy from "ftp-deploy";
-import { BenchmarkConfig, BenchmarkFtpConfig } from "./common";
+import { BenchmarkConfig, BenchmarkFtpConfig } from "../common";
 
 export async function uploadToFTP(
   config: BenchmarkFtpConfig,
@@ -60,6 +60,7 @@ export async function uploadToFTP(
     });
   } catch (err) {
     console.error("Error deploying using ftp-deploy", err);
+    throw err;
   } finally {
     ftpClient.close();
   }

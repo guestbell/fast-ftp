@@ -1,7 +1,7 @@
 | Function | Average Time (ms) | Max Time (ms) | Min Time (ms) | Avg Time vs shortest | Min Time vs shortest | Max Time vs shortest |
 | --- | --- | --- | --- | --- |
-| ftp | 98489.50ms | 104750.00ms | 92229.00ms | 5.23 | 4.91 | 5.54 |
-| basic-ftp | 88227.00ms | 98673.00ms | 77781.00ms | 4.68 | 4.14 | 5.22 |
-| ftp-deploy | 140881.00ms | 141474.00ms | 140288.00ms | 7.48 | 7.47 | 7.48 |
-| promise-ftp | 124778.00ms | 132270.00ms | 117286.00ms | 6.62 | 6.25 | 6.99 |
-| fast-ftp | 18842.50ms | 18917.00ms | 18768.00ms | 1.00 | 1.00 | 1.00 |
+| ftp | 91968.50ms | 94833.00ms | 89104.00ms | 5.55 | 6.01 | 5.19 |
+| basic-ftp | 88726.50ms | 90185.00ms | 87268.00ms | 5.36 | 5.88 | 4.93 |
+| ftp-deploy | 101090.50ms | 109430.00ms | 92751.00ms | 6.10 | 6.25 | 5.98 |
+| promise-ftp | 92665.50ms | 97331.00ms | 88000.00ms | 5.60 | 5.93 | 5.32 |
+| fast-ftp | 16559.50ms | 18289.00ms | 14830.00ms | 1.00 | 1.00 | 1.00 |

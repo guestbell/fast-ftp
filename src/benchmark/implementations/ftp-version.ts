@@ -1,7 +1,7 @@
 import Client from "ftp";
 import * as fs from "fs";
 import * as path from "path";
-import { ClientError } from "../types";
+import { ClientError } from "../../types";
 
 function uploadDirRecursive(
   dir: string,
@@ -157,6 +157,7 @@ export async function uploadToFTP(
     });
   } catch (err) {
     console.error(err);
+    throw err;
   } finally {
     client.end();
   }

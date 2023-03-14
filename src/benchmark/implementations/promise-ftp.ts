@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import PromiseFtp from "promise-ftp";
-import { BenchmarkConfig, BenchmarkFtpConfig } from "./common";
+import { BenchmarkConfig, BenchmarkFtpConfig } from "../common";
 
 async function uploadDirRecursive(
   dir: string,
@@ -66,6 +66,7 @@ export async function uploadToFTP(
     });
   } catch (err) {
     console.error("Error deploying using promise-ftp", err);
+    throw err;
   } finally {
     client.end();
   }

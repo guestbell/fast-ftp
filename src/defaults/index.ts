@@ -1,0 +1,1 @@
+export { DefaultFtpFunctionConfig } from "./DefaultFtpFunctionConfig";

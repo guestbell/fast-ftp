@@ -1,15 +1,22 @@
-import { ClientConfig, ClientError, DeployConfig } from "../types";
+import {
+  ClientConfig,
+  ClientError,
+  DeployConfig,
+  FtpFunctionConfig,
+} from "../types";
 import { resolve } from "path";
 import {
   deleteDirectory,
   uploadDirectory,
   getClients,
   ItemPool,
+  createLoggerFromPartialConfig,
 } from "../utils";
 
 export async function deploy(
   deployConfig: DeployConfig,
-  clientConfig: ClientConfig
+  clientConfig: ClientConfig,
+  ftpFunctionConfig: Partial<FtpFunctionConfig>
 ) {
   const {
     remoteRoot,
@@ -18,47 +25,57 @@ export async function deploy(
     localRoot,
     concurrency = 16,
   } = deployConfig;
+  const logger = createLoggerFromPartialConfig(ftpFunctionConfig);
 
-  const clients = await getClients(concurrency, clientConfig);
+  const clients = await getClients(ftpFunctionConfig)(
+    concurrency,
+    clientConfig
+  );
   const clientPool = new ItemPool(clients);
   const client = clients[0];
 
-  console.log(`Using ${clients.length} connections.`);
+  logger.info(
+    `Starting to deploy '${remoteRoot}' from '${localRoot}' using ${clients.length} connections.`
+  );
 
   // Delete existing old deployment
   return new Promise<void>(async (resolve) => {
-    console.log("Starting to delete '" + tempRoot + "'.");
-    console.log("Starting to delete '" + oldRoot + "'.");
-    const deleteTmp = deleteDirectory(clientPool, tempRoot);
-    const deleteOld = deleteDirectory(clientPool, oldRoot);
+    logger.info("Task 1/7: Delete '" + tempRoot + "'.");
+    logger.info("Task 2/7: Delete '" + oldRoot + "'.");
+    const deleteTmp = deleteDirectory(ftpFunctionConfig)(clientPool, tempRoot);
+    const deleteOld = deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot);
     await Promise.all([deleteTmp, deleteOld]);
     resolve();
   })
     .then(async () => {
       try {
-        console.log("Starting to create '" + tempRoot + "'.");
+        logger.info("Task 3/7: Create '" + tempRoot + "'.");
         await client.mkdirAsync(tempRoot);
       } catch (err) {
         if (err && (err as ClientError).code !== 550) {
-          console.error("Error when creating '" + tempRoot + "'.", err);
+          logger.error("Error when creating '" + tempRoot + "'.", err);
           throw err;
         }
       }
     })
     .then(() => {
-      console.log("Starting to upload.");
+      logger.info(`Task 4/7: Upload '${remoteRoot}' from '${localRoot}'.`);
       const outTotalPath = resolve(localRoot);
-      return uploadDirectory(clientPool, tempRoot, outTotalPath);
+      return uploadDirectory(ftpFunctionConfig)(
+        clientPool,
+        tempRoot,
+        outTotalPath
+      );
     })
     .then(async () => {
       try {
-        console.log(
-          "Starting to rename '" + remoteRoot + "' => '" + oldRoot + "'."
+        logger.info(
+          "Task 5/7: Rename '" + remoteRoot + "' => '" + oldRoot + "'."
         );
         await client.renameAsync(remoteRoot, oldRoot);
       } catch (err) {
         if (err && (err as ClientError).code !== 550) {
-          console.error(
+          logger.error(
             "Error when renaming '" + remoteRoot + "' => '" + oldRoot + "'."
           );
           throw err;
@@ -67,20 +84,20 @@ export async function deploy(
     })
     .then(async () => {
       try {
-        console.log(
-          "Starting to rename '" + tempRoot + "' => '" + remoteRoot + "'."
+        logger.info(
+          "Task 6/7: Rename '" + tempRoot + "' => '" + remoteRoot + "'."
         );
         await client.renameAsync(tempRoot, remoteRoot);
       } catch (err) {
-        console.error(
+        logger.error(
           "Error when renaming " + tempRoot + "' => '" + remoteRoot + "'."
         );
         throw err;
       }
     })
     .then(() => {
-      console.log("Starting to delete '" + oldRoot + "'.");
-      return deleteDirectory(clientPool, oldRoot);
+      logger.info("Task 7/7: Delete '" + oldRoot + "'.");
+      return deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot);
     })
     .finally(() => {
       clients.forEach((client) => {
