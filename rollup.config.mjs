@@ -2,6 +2,7 @@ import { babel } from "@rollup/plugin-babel";
 import external from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
+import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
@@ -32,6 +33,7 @@ export default [
       resolve(),
       commonjs(),
       typescript(),
+      json(),
       terser(),
     ],
   },
@@ -58,6 +60,7 @@ export default [
       resolve(),
       commonjs(),
       typescript(),
+      json(),
       terser(),
     ],
   },

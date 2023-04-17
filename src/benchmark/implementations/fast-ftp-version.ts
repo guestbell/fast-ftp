@@ -13,5 +13,6 @@ export const uploadToFtp = (
       oldRoot: `${options.remoteRoot}-old`,
       tempRoot: `${options.remoteRoot}-tmp`,
     },
-    config
+    config,
+    {}
   );

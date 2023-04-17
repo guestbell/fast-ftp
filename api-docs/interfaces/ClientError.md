@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/types/ClientError.ts:2](https://github.com/guestbell/fast-ftp/blob/d479712/src/types/ClientError.ts#L2)
+[src/types/ClientError.ts:2](https://github.com/guestbell/fast-ftp/blob/a095c9c/src/types/ClientError.ts#L2)
 
 ___
 
@@ -39,7 +39,7 @@ Error.message
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1054
+node_modules/typescript/lib/lib.es5.d.ts:1055
 
 ___
 
@@ -53,7 +53,7 @@ Error.name
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1053
+node_modules/typescript/lib/lib.es5.d.ts:1054
 
 ___
 
@@ -67,4 +67,4 @@ Error.stack
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1055
+node_modules/typescript/lib/lib.es5.d.ts:1056

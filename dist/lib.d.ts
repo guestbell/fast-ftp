@@ -1,4 +1,5 @@
 import Client, { ListingElement, Options } from 'ftp';
+import winston from 'winston';
 
 interface AsyncClient extends Client {
     renameAsync: (oldName: string, newName: string) => Promise<void>;
@@ -24,32 +25,70 @@ interface ClientError extends Error {
     code: number;
 }
 
-declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig): Promise<void>;
-
 declare const getAllDirDirs: (dirPath: string, arrayOfFiles?: string[]) => string[];
 
 declare const getAllDirFiles: (dirPath: string, arrayOfFiles?: string[]) => string[];
 
 declare const sortFilesBySize: (files: string[]) => string[];
 
-declare function deleteDirectory(clients: AsyncClient[], remoteDir: string): Promise<void>;
-
-declare function uploadDirectory(clients: AsyncClient[], remoteDir: string, localDir: string): Promise<void>;
-
-declare function getClients(concurrency: number | undefined, config: ClientConfig): Promise<AsyncClient[]>;
-
-declare const uploadDirectories: (clients: AsyncClient[], allDirs: string[], localDir: string, remoteDir: string) => Promise<void>;
-
-declare const uploadFiles: (clients: AsyncClient[], allFiles: string[], localDir: string, remoteDir: string) => Promise<void>;
-
-declare const getAllRemote: (clients: AsyncClient[], remoteDir: string, arrayOfFiles?: ListingElement[]) => Promise<ListingElement[]>;
-
-declare const deleteFiles: (clients: AsyncClient[], allFiles: string[]) => Promise<void>;
-
-declare const deleteDirectories: (clients: AsyncClient[], allDirs: string[]) => Promise<void>;
-
 declare const getClientConfig: () => ClientConfig;
 
 declare const getDeployConfig: () => DeployConfig;
 
-export { AsyncClient, ClientConfig, ClientError, DeployConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
+declare const getFtpFunctionConfig: () => FtpFunctionConfig;
+
+type Tree = {
+    root: string;
+    absRoot: string;
+    branches?: Tree[];
+};
+declare const getDirTree: (directories: string[]) => Tree[];
+
+declare const removeKeys: (obj: any, keys: string[]) => object;
+
+declare const dirTreeToParallelBatches: (trees: Tree[]) => string[][];
+
+declare class ItemPool<T> {
+    private items;
+    private waiting;
+    constructor(items: T[]);
+    acquire(): Promise<T>;
+    acquireAll(): Promise<T[]>;
+    release(item: T): void;
+    releaseMany(items: T[]): void;
+}
+
+declare const createLogger: (level: WinstonLogLevel) => winston.Logger;
+declare const createLoggerFromPartialConfig: (config: Partial<FtpFunctionConfig>) => winston.Logger;
+type WinstonLogLevel = "error" | "warn" | "info" | "http" | "verbose" | "debug" | "silly";
+declare const WinstonLogLevels: WinstonLogLevel[];
+
+declare const getFinalFtpConfig: (config: Partial<FtpFunctionConfig>) => {
+    retries: number;
+    logLevel: WinstonLogLevel;
+};
+
+declare const deleteDirectory: (config: Partial<FtpFunctionConfig>) => (clientPool: ItemPool<AsyncClient>, remoteDir: string) => Promise<void>;
+
+declare const uploadDirectory: (config: Partial<FtpFunctionConfig>) => (clientsPool: ItemPool<AsyncClient>, remoteDir: string, localDir: string) => Promise<void>;
+
+declare const getClients: (config: Partial<FtpFunctionConfig>) => (concurrency: number | undefined, config: ClientConfig) => Promise<AsyncClient[]>;
+
+declare const uploadDirectories: (config: Partial<FtpFunctionConfig>) => (clientsPool: ItemPool<AsyncClient>, allDirs: string[], localDir: string, remoteDir: string) => Promise<void>;
+
+declare const uploadFiles: (config: Partial<FtpFunctionConfig>) => (clientsPool: ItemPool<AsyncClient>, allFiles: string[], localDir: string, remoteDir: string) => Promise<void>;
+
+declare const getAllRemote: (config: Partial<FtpFunctionConfig>) => (itemPool: ItemPool<AsyncClient>, remoteDir: string) => Promise<ListingElement[]>;
+
+declare const deleteFiles: (config: Partial<FtpFunctionConfig>) => (clientPool: ItemPool<AsyncClient>, allFiles: string[]) => Promise<void>;
+
+declare const deleteDirectories: (config: Partial<FtpFunctionConfig>) => (clientPool: ItemPool<AsyncClient>, allDirs: string[]) => Promise<void>;
+
+type FtpFunctionConfig = {
+    retries: number;
+    logLevel: WinstonLogLevel;
+};
+
+declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig, ftpFunctionConfig: Partial<FtpFunctionConfig>): Promise<void>;
+
+export { AsyncClient, ClientConfig, ClientError, DeployConfig, FtpFunctionConfig, ItemPool, WinstonLogLevel, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirTreeToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getDirTree, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
