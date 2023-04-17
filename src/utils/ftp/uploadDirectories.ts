@@ -2,9 +2,8 @@ import { join, resolve } from "path";
 import { AsyncClient, FtpFunctionConfig } from "../../types";
 import {
   createLoggerFromPartialConfig,
-  getDirTree,
   ItemPool,
-  dirTreeToParallelBatches,
+  dirsToParallelBatches,
 } from "../misc";
 
 export const uploadDirectories =
@@ -17,17 +16,17 @@ export const uploadDirectories =
   ) => {
     const logger = createLoggerFromPartialConfig(config);
     const resolvedLocalDir = resolve(localDir);
-    const tree = getDirTree(
-      allDirs.map((a) =>
-        join(
-          remoteDir,
-          resolve(a)
-            .replaceAll(/\//g, "\\")
-            .replace(resolvedLocalDir.replaceAll(/\//g, "\\"), "")
-        ).replaceAll(/\\/g, "/")
-      )
+    const resolvedDirs = allDirs.map((a) =>
+      join(
+        remoteDir,
+        resolve(a)
+          .replaceAll(/\//g, "\\")
+          .replace(resolvedLocalDir.replaceAll(/\//g, "\\"), "")
+      ).replaceAll(/\\/g, "/")
     );
-    const parallel = dirTreeToParallelBatches(tree).reverse().slice(1);
+    /*const tree = getDirTree(resolvedDirs);
+    const parallel = dirTreeToParallelBatches(tree).reverse();*/
+    const parallel = dirsToParallelBatches(resolvedDirs).reverse();
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
       const batch = parallel[batchIndex];
       const clientsPromises: Promise<void>[] = [];

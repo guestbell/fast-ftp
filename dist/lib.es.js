@@ -15069,72 +15069,35 @@ const removeKeys = (obj, keys) => obj !== Object(obj)
             .filter((k) => !keys.includes(k))
             .reduce((acc, x) => Object.assign(acc, { [x]: removeKeys(obj[x], keys) }), {});
 
-const getDirTree = (directories) => {
-    const splitDirectories = directories.map((d) => d.split("/").filter((a) => a?.length > 0));
-    const getUniqueLevel = (split, prevRoot) => {
-        const uniqueBase = [
-            ...new Set(split.filter((a) => a.length > 0).map((dirParts) => dirParts[0])),
-        ];
-        const branches = uniqueBase.map((root) => {
-            const validSplits = split
-                .filter((b) => b[0] === root)
-                .map((a) => a.slice(1));
-            const absRoot = [prevRoot, root].filter((a) => a).join("/");
-            const newBranches = validSplits.length
-                ? getUniqueLevel(validSplits, absRoot)
-                : [];
-            let tree = {
-                root,
-                absRoot,
-                isLeafRoot: validSplits.some((a) => !a.length) &&
-                    validSplits.some((a) => a.length),
-            };
-            if (newBranches.length) {
-                tree.branches = newBranches;
-            }
-            return tree;
-        });
-        return branches.map((branch) => {
-            if (!branch.isLeafRoot && branch.branches?.every((b) => b.isLeafRoot)) {
-                branch.root += "/" + branch.branches[0].root;
-                branch.absRoot += "/" + branch.branches[0].root;
-                branch.branches = branch.branches[0].branches ?? [];
-                branch.isLeafRoot = true;
-            }
-            return branch;
-        });
-    };
-    const trees = getUniqueLevel(splitDirectories);
-    return trees.map((b) => removeKeys(b, ["isLeafRoot"]));
-};
-
-const dirTreeToParallelBatches = (trees) => {
-    if (!trees.length) {
-        return [];
+const dirsToParallelBatches = (dirs) => {
+    let result = [];
+    if (!dirs.length) {
+        return result;
     }
-    const batches = [];
-    // Push all the root directories into the first batch
-    const firstBatch = trees.map((tree) => tree.root);
-    batches.push(firstBatch);
-    // For each subsequent batch, push the directories from the next layer down
-    let currentLayer = trees;
-    while (currentLayer.some((tree) => tree.branches)) {
-        const nextLayer = [];
-        const batch = [];
-        // Collect all the next layer directories and push them into the batch
-        for (const tree of currentLayer) {
-            if (tree.branches) {
-                nextLayer.push(...tree.branches);
-                const branchPaths = tree.branches.map((branch) => branch.absRoot);
-                batch.push(...branchPaths);
-            }
+    // Sort the input array based on the number of "/" symbols in the paths
+    dirs.sort((a, b) => {
+        const aDepth = a.split("/").length;
+        const bDepth = b.split("/").length;
+        return bDepth - aDepth;
+    });
+    let maxSlashes = dirs[0].split("/").length;
+    let batch = [];
+    for (let i = 0; i < dirs.length; i++) {
+        const dir = dirs[i];
+        const dirDepth = dir.split("/").length;
+        if (dirDepth === maxSlashes) {
+            batch.push(dir);
         }
-        if (batch.length > 0) {
-            batches.push(batch);
+        else {
+            result = [...result, batch];
+            maxSlashes = dirDepth;
+            batch = [dir];
         }
-        currentLayer = nextLayer;
     }
-    return batches.reverse().map((batch) => [...new Set(batch)]);
+    if (batch.length) {
+        result = [...result, batch];
+    }
+    return result;
 };
 
 class ItemPool {
@@ -15262,8 +15225,9 @@ const deleteDirectories = (config) => async (clientPool, allDirs) => {
     });
   }*/
     const logger = createLoggerFromPartialConfig(config);
-    const tree = getDirTree(allDirs);
-    const parallel = dirTreeToParallelBatches(tree);
+    /*const tree = getDirTree(allDirs);
+    const parallel = dirTreeToParallelBatches(tree);*/
+    const parallel = dirsToParallelBatches(allDirs);
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
         const batch = parallel[batchIndex];
         const filesPromises = [];
@@ -15362,10 +15326,12 @@ const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDi
 const uploadDirectories = (config) => async (clientsPool, allDirs, localDir, remoteDir) => {
     const logger = createLoggerFromPartialConfig(config);
     const resolvedLocalDir = resolve(localDir);
-    const tree = getDirTree(allDirs.map((a) => join(remoteDir, resolve(a)
+    const resolvedDirs = allDirs.map((a) => join(remoteDir, resolve(a)
         .replaceAll(/\//g, "\\")
-        .replace(resolvedLocalDir.replaceAll(/\//g, "\\"), "")).replaceAll(/\\/g, "/")));
-    const parallel = dirTreeToParallelBatches(tree).reverse().slice(1);
+        .replace(resolvedLocalDir.replaceAll(/\//g, "\\"), "")).replaceAll(/\\/g, "/"));
+    /*const tree = getDirTree(resolvedDirs);
+    const parallel = dirTreeToParallelBatches(tree).reverse();*/
+    const parallel = dirsToParallelBatches(resolvedDirs).reverse();
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
         const batch = parallel[batchIndex];
         const clientsPromises = [];
@@ -21312,4 +21278,4 @@ async function deploy(deployConfig, clientConfig, ftpFunctionConfig) {
     });
 }
 
-export { ItemPool, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirTreeToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getDirTree, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
+export { ItemPool, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirsToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };

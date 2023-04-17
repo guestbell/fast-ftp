@@ -1,8 +1,7 @@
 import { AsyncClient, ClientError } from "../../types";
 import {
   createLoggerFromPartialConfig,
-  dirTreeToParallelBatches,
-  getDirTree,
+  dirsToParallelBatches,
   ItemPool,
 } from "../misc";
 import { FtpFunctionConfig } from "../../types";
@@ -26,8 +25,9 @@ export const deleteDirectories =
     });
   }*/
     const logger = createLoggerFromPartialConfig(config);
-    const tree = getDirTree(allDirs);
-    const parallel = dirTreeToParallelBatches(tree);
+    /*const tree = getDirTree(allDirs);
+    const parallel = dirTreeToParallelBatches(tree);*/
+    const parallel = dirsToParallelBatches(allDirs);
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
       const batch = parallel[batchIndex];
       const filesPromises: Promise<void>[] = [];

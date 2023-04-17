@@ -37,16 +37,9 @@ declare const getDeployConfig: () => DeployConfig;
 
 declare const getFtpFunctionConfig: () => FtpFunctionConfig;
 
-type Tree = {
-    root: string;
-    absRoot: string;
-    branches?: Tree[];
-};
-declare const getDirTree: (directories: string[]) => Tree[];
-
 declare const removeKeys: (obj: any, keys: string[]) => object;
 
-declare const dirTreeToParallelBatches: (trees: Tree[]) => string[][];
+declare const dirsToParallelBatches: (dirs: string[]) => string[][];
 
 declare class ItemPool<T> {
     private items;
@@ -91,4 +84,4 @@ type FtpFunctionConfig = {
 
 declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig, ftpFunctionConfig: Partial<FtpFunctionConfig>): Promise<void>;
 
-export { AsyncClient, ClientConfig, ClientError, DeployConfig, FtpFunctionConfig, ItemPool, WinstonLogLevel, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirTreeToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getDirTree, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
+export { AsyncClient, ClientConfig, ClientError, DeployConfig, FtpFunctionConfig, ItemPool, WinstonLogLevel, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirsToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
