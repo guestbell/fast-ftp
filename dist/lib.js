@@ -15022,7 +15022,7 @@ var container = class Container {
 
 const DefaultFtpFunctionConfig = {
     retries: 10,
-    logLevel: "verbose",
+    logLevel: "info",
 };
 
 const getFinalFtpConfig = (config) => ({
