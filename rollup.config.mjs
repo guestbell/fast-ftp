@@ -34,7 +34,7 @@ export default [
       commonjs(),
       typescript(),
       json(),
-      terser(),
+      //terser(),
     ],
   },
   {
@@ -61,7 +61,7 @@ export default [
       commonjs(),
       typescript(),
       json(),
-      terser(),
+      //terser(),
     ],
   },
   {
