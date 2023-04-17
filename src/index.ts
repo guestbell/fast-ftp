@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { deploy } from "./core";
 import {
   getClientConfig,
