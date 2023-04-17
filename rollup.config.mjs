@@ -7,6 +7,7 @@ import { terser } from "rollup-plugin-terser";
 import dts from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
 import commonjs from "@rollup/plugin-commonjs";
+import shebang from "rollup-plugin-add-shebang";
 
 export default [
   {
@@ -34,6 +35,12 @@ export default [
       commonjs(),
       typescript(),
       json(),
+      shebang({
+        // A single or an array of filename patterns. Defaults to ['**/cli.js', '**/bin.js'].
+        include: "dist/index.js",
+        // you could also 'exclude' here
+        // or specify a special shebang (or a function returning one) using the 'shebang' option
+      }),
       //terser(),
     ],
   },

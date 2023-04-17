@@ -84,7 +84,7 @@
 
 #### Defined in
 
-[src/types/AsyncClient.ts:8](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L8)
+[src/types/AsyncClient.ts:8](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L8)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/types/AsyncClient.ts:9](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L9)
+[src/types/AsyncClient.ts:9](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L9)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/types/AsyncClient.ts:6](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L6)
+[src/types/AsyncClient.ts:6](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L6)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[src/types/AsyncClient.ts:7](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L7)
+[src/types/AsyncClient.ts:7](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L7)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/types/AsyncClient.ts:4](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L4)
+[src/types/AsyncClient.ts:4](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L4)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[src/types/AsyncClient.ts:5](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/AsyncClient.ts#L5)
+[src/types/AsyncClient.ts:5](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/AsyncClient.ts#L5)
 
 ## Methods
 

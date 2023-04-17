@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/types/DeployConfig.ts:6](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/DeployConfig.ts#L6)
+[src/types/DeployConfig.ts:6](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/DeployConfig.ts#L6)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/types/DeployConfig.ts:5](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/DeployConfig.ts#L5)
+[src/types/DeployConfig.ts:5](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/DeployConfig.ts#L5)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/types/DeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/DeployConfig.ts#L4)
+[src/types/DeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/DeployConfig.ts#L4)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/types/DeployConfig.ts:2](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/DeployConfig.ts#L2)
+[src/types/DeployConfig.ts:2](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/DeployConfig.ts#L2)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[src/types/DeployConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/2f35547/src/types/DeployConfig.ts#L3)
+[src/types/DeployConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/b8554e4/src/types/DeployConfig.ts#L3)
