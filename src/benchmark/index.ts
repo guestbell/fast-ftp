@@ -32,7 +32,7 @@ benchmark({
     user: clientConfig.user!,
   },
   options: {
-    localRoot: resolve("./exampleDataSmall"),
+    localRoot: resolve("./exampleData/small"),
     remoteRoot: "/test",
   },
 }).then((results) => {

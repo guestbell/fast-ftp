@@ -18,7 +18,7 @@
     "commit:build": "git add . && git commit -m \"Deploy commit\" --quiet && npm run push:git || true",
     "create:patch": "npm run version:patch && npm run push:git",
     "deploy": "npm run api-docs && npm run build && npm run commit:build && npm publish --access=public && npm run create:patch",
-    "real-test": "ts-node src/index.ts --local-root=exampleData --remote-root=/test --concurrency=32",
+    "real-test": "ts-node src/index.ts --local-root=exampleData/default --remote-root=/test --concurrency=32",
     "benchmark": "ts-node src/benchmark"
   },
   "keywords": [
