@@ -16,6 +16,7 @@
 - [debug](ClientConfig.md#debug)
 - [host](ClientConfig.md#host)
 - [keepalive](ClientConfig.md#keepalive)
+- [operationTimeout](ClientConfig.md#operationtimeout)
 - [password](ClientConfig.md#password)
 - [pasvTimeout](ClientConfig.md#pasvtimeout)
 - [port](ClientConfig.md#port)
@@ -100,6 +101,16 @@ Options.keepalive
 #### Defined in
 
 node_modules/@types/ftp/index.d.ts:53
+
+___
+
+### operationTimeout
+
+• `Optional` **operationTimeout**: `number`
+
+#### Defined in
+
+[src/types/ClientConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/beffefa/src/types/ClientConfig.ts#L4)
 
 ___
 

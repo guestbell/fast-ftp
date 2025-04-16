@@ -15021,6 +15021,7 @@ var container = class Container {
 const DefaultFtpFunctionConfig = {
     retries: 10,
     logLevel: "info",
+    operationTimeout: 10000,
 };
 
 const getFinalFtpConfig = (config) => ({
@@ -15049,6 +15050,8 @@ const getFtpFunctionConfig = () => {
     const retries = (args["retries"] && Number(args["retries"])) ??
         DefaultFtpFunctionConfig.retries;
     const logLevel = args["log-level"] ?? DefaultFtpFunctionConfig.logLevel;
+    const operationTimeout = (args["operation-timeout"] && Number(args["operation-timeout"])) ??
+        DefaultFtpFunctionConfig.operationTimeout;
     if (logLevel && !WinstonLogLevels.some((a) => a === logLevel)) {
         throw new Error(`--log-level parameter only supports these values: [${WinstonLogLevels}] , [${logLevel}] was provided instead.`);
     }
@@ -15058,6 +15061,7 @@ const getFtpFunctionConfig = () => {
     return {
         retries,
         logLevel,
+        operationTimeout,
     };
 };
 
@@ -15257,34 +15261,9 @@ const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDi
     const resolvedLocalDir = resolve(localDir);
     allFiles = sortFilesBySize(allFiles);
     const totalLength = allFiles.length;
-    // const clientsCount = Math.min(clients.length, totalLength);
     let filesPromises = [];
     let count = 0;
     const failedFiles = [];
-    /*for (let index = 0; index < clientsCount; index++) {
-    filesPromises.push(
-      new Promise(async (resolve, reject) => {
-        const client = clients[index];
-        for (let j = index; j < totalLength; j += clientsCount) {
-          const file = allFiles[j];
-          const remotePath = join(
-            remoteDir,
-            file
-              .replaceAll(/\//g, "\\")
-              .split(resolvedLocalDir.replaceAll(/\//g, "\\"))[1]
-          ).replaceAll(/\\/g, "/");
-          await client.putAsync(file, remotePath).catch((err) => {
-            console.error("Error uploading a file: ", err);
-            failedFiles.push(file);
-          });
-          count++;
-          console.log(`Uploading files ${count}/${totalLength}...`);
-        }
-        resolve();
-      })
-    );
-  }
-  */
     for (let j = 0; j < totalLength; j++) {
         const client = await clientsPool.acquire();
         const file = allFiles[j];
@@ -21167,6 +21146,15 @@ function makeError(code, text) {
   return err;
 }
 
+function withTimeoutFunction(fn, timeoutMs, errorMessage = "Operation timed out") {
+    return (...args) => {
+        return Promise.race([
+            fn(...args),
+            new Promise((_, reject) => setTimeout(() => reject(new Error(errorMessage)), timeoutMs)),
+        ]);
+    };
+}
+
 const getClients = (config) => async (concurrency = 30, config) => {
     let clientsPromises = [];
     for (let index = 0; index < concurrency; index++) {
@@ -21174,20 +21162,20 @@ const getClients = (config) => async (concurrency = 30, config) => {
         clientsPromises = clientsPromises.concat([
             new Promise((resolve, reject) => {
                 client.on("ready", () => {
-                    client.renameAsync = promisify(client.rename).bind(client);
-                    client.mkdirAsync = promisify(client.mkdir).bind(client);
-                    client.rmdirAsync = promisify(client.rmdir).bind(client);
-                    client.putAsync = promisify(client.put).bind(client);
-                    client.deleteAsync = promisify(client.delete).bind(client);
-                    client.listAsync = async (remoteDir) => (await new Promise((resolve, reject) => client.list(remoteDir.replaceAll(/\\/g, "/"), (err, data) => {
+                    const { operationTimeout = 10000 } = config;
+                    client.renameAsync = withTimeoutFunction(promisify(client.rename).bind(client), operationTimeout, "renameAsync timed out");
+                    client.mkdirAsync = withTimeoutFunction(promisify(client.mkdir).bind(client), operationTimeout, "mkdirAsync timed out");
+                    client.rmdirAsync = withTimeoutFunction(promisify(client.rmdir).bind(client), operationTimeout, "rmdirAsync timed out");
+                    client.putAsync = withTimeoutFunction(promisify(client.put).bind(client), operationTimeout, "putAsync timed out");
+                    client.deleteAsync = withTimeoutFunction(promisify(client.delete).bind(client), operationTimeout, "deleteAsync timed out");
+                    client.listAsync = withTimeoutFunction((remoteDir) => new Promise((resolve, reject) => client.list(remoteDir.replaceAll(/\\/g, "/"), (err, data) => {
                         if (err && err.code !== 450) {
                             reject(err);
                         }
                         else {
                             resolve((data ?? []).filter((a) => a.name !== "." && a.name !== ".."));
                         }
-                    }))) ?? [];
-                    // client.listAsync = util.promisify(client.listAsync).bind(client);
+                    })), operationTimeout, "listAsync timed out");
                     resolve(client);
                 });
                 client.on("error", (err) => {

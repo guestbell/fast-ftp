@@ -20,34 +20,9 @@ export const uploadFiles =
     const resolvedLocalDir = resolvePath(localDir);
     allFiles = sortFilesBySize(allFiles);
     const totalLength = allFiles.length;
-    // const clientsCount = Math.min(clients.length, totalLength);
     let filesPromises: Promise<void>[] = [];
     let count = 0;
     const failedFiles: string[] = [];
-    /*for (let index = 0; index < clientsCount; index++) {
-    filesPromises.push(
-      new Promise(async (resolve, reject) => {
-        const client = clients[index];
-        for (let j = index; j < totalLength; j += clientsCount) {
-          const file = allFiles[j];
-          const remotePath = join(
-            remoteDir,
-            file
-              .replaceAll(/\//g, "\\")
-              .split(resolvedLocalDir.replaceAll(/\//g, "\\"))[1]
-          ).replaceAll(/\\/g, "/");
-          await client.putAsync(file, remotePath).catch((err) => {
-            console.error("Error uploading a file: ", err);
-            failedFiles.push(file);
-          });
-          count++;
-          console.log(`Uploading files ${count}/${totalLength}...`);
-        }
-        resolve();
-      })
-    );
-  }
-  */
     for (let j = 0; j < totalLength; j++) {
       const client = await clientsPool.acquire();
       const file = allFiles[j];

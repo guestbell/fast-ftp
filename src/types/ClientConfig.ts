@@ -1,3 +1,5 @@
 import { Options } from "ftp";
 
-export interface ClientConfig extends Options {}
+export interface ClientConfig extends Options {
+  operationTimeout?: number;
+}

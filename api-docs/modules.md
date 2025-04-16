@@ -58,11 +58,12 @@
 | Name | Type |
 | :------ | :------ |
 | `logLevel` | [`WinstonLogLevel`](modules.md#winstonloglevel) |
+| `operationTimeout` | `number` |
 | `retries` | `number` |
 
 #### Defined in
 
-[src/types/FtpFunctionConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/57989a0/src/types/FtpFunctionConfig.ts#L3)
+[src/types/FtpFunctionConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/beffefa/src/types/FtpFunctionConfig.ts#L3)
 
 ___
 
@@ -72,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/logger.ts:22](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/logger.ts#L22)
+[src/utils/misc/logger.ts:22](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/logger.ts#L22)
 
 ## Variables
 
@@ -82,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/logger.ts:31](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/logger.ts#L31)
+[src/utils/misc/logger.ts:31](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/logger.ts#L31)
 
 ## Functions
 
@@ -102,7 +103,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/logger.ts:5](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/logger.ts#L5)
+[src/utils/misc/logger.ts:5](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/logger.ts#L5)
 
 ___
 
@@ -122,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/logger.ts:18](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/logger.ts#L18)
+[src/utils/misc/logger.ts:18](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/logger.ts#L18)
 
 ___
 
@@ -155,7 +156,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/deleteDirectories.ts:10](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/deleteDirectories.ts#L10)
+[src/utils/ftp/deleteDirectories.ts:10](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/deleteDirectories.ts#L10)
 
 ___
 
@@ -188,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/deleteDirectory.ts:9](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/deleteDirectory.ts#L9)
+[src/utils/ftp/deleteDirectory.ts:9](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/deleteDirectory.ts#L9)
 
 ___
 
@@ -221,7 +222,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/deleteFiles.ts:6](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/deleteFiles.ts#L6)
+[src/utils/ftp/deleteFiles.ts:6](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/deleteFiles.ts#L6)
 
 ___
 
@@ -243,7 +244,7 @@ ___
 
 #### Defined in
 
-[src/core/deploy.ts:16](https://github.com/guestbell/fast-ftp/blob/57989a0/src/core/deploy.ts#L16)
+[src/core/deploy.ts:16](https://github.com/guestbell/fast-ftp/blob/beffefa/src/core/deploy.ts#L16)
 
 ___
 
@@ -263,7 +264,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/dirsToParallelBatches.ts:1](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/dirsToParallelBatches.ts#L1)
+[src/utils/misc/dirsToParallelBatches.ts:1](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/dirsToParallelBatches.ts#L1)
 
 ___
 
@@ -284,7 +285,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/getAllDirDirs.ts:3](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/fs/getAllDirDirs.ts#L3)
+[src/utils/fs/getAllDirDirs.ts:3](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/fs/getAllDirDirs.ts#L3)
 
 ___
 
@@ -305,7 +306,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/getAllDirFiles.ts:4](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/fs/getAllDirFiles.ts#L4)
+[src/utils/fs/getAllDirFiles.ts:4](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/fs/getAllDirFiles.ts#L4)
 
 ___
 
@@ -338,7 +339,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/getAllRemote.ts:7](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/getAllRemote.ts#L7)
+[src/utils/ftp/getAllRemote.ts:7](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/getAllRemote.ts#L7)
 
 ___
 
@@ -352,7 +353,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/getClientConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/getClientConfig.ts#L3)
+[src/utils/misc/getClientConfig.ts:3](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/getClientConfig.ts#L3)
 
 ___
 
@@ -385,7 +386,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/getClients.ts:11](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/getClients.ts#L11)
+[src/utils/ftp/getClients.ts:12](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/getClients.ts#L12)
 
 ___
 
@@ -399,7 +400,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/getDeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/getDeployConfig.ts#L4)
+[src/utils/misc/getDeployConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/getDeployConfig.ts#L4)
 
 ___
 
@@ -420,11 +421,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `logLevel` | [`WinstonLogLevel`](modules.md#winstonloglevel) |
+| `operationTimeout` | `number` |
 | `retries` | `number` |
 
 #### Defined in
 
-[src/utils/misc/getFinalFtpConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/getFinalFtpConfig.ts#L4)
+[src/utils/misc/getFinalFtpConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/getFinalFtpConfig.ts#L4)
 
 ___
 
@@ -438,7 +440,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/getFtpFunctionConfig.ts:6](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/getFtpFunctionConfig.ts#L6)
+[src/utils/misc/getFtpFunctionConfig.ts:6](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/getFtpFunctionConfig.ts#L6)
 
 ___
 
@@ -459,7 +461,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/removeKeys.ts:1](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/removeKeys.ts#L1)
+[src/utils/misc/removeKeys.ts:1](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/removeKeys.ts#L1)
 
 ___
 
@@ -479,7 +481,7 @@ ___
 
 #### Defined in
 
-[src/utils/fs/sortFilesBySize.ts:3](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/fs/sortFilesBySize.ts#L3)
+[src/utils/fs/sortFilesBySize.ts:3](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/fs/sortFilesBySize.ts#L3)
 
 ___
 
@@ -514,7 +516,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadDirectories.ts:10](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/uploadDirectories.ts#L10)
+[src/utils/ftp/uploadDirectories.ts:10](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/uploadDirectories.ts#L10)
 
 ___
 
@@ -548,7 +550,7 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadDirectory.ts:8](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/uploadDirectory.ts#L8)
+[src/utils/ftp/uploadDirectory.ts:8](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/uploadDirectory.ts#L8)
 
 ___
 
@@ -583,4 +585,4 @@ ___
 
 #### Defined in
 
-[src/utils/ftp/uploadFiles.ts:11](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/ftp/uploadFiles.ts#L11)
+[src/utils/ftp/uploadFiles.ts:11](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/ftp/uploadFiles.ts#L11)

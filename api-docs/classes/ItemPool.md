@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:5](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L5)
+[src/utils/misc/ItemPool.ts:5](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L5)
 
 ## Properties
 
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:2](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L2)
+[src/utils/misc/ItemPool.ts:2](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L2)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:3](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L3)
+[src/utils/misc/ItemPool.ts:3](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L3)
 
 ## Methods
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:9](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L9)
+[src/utils/misc/ItemPool.ts:9](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L9)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:20](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L20)
+[src/utils/misc/ItemPool.ts:20](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L20)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:37](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L37)
+[src/utils/misc/ItemPool.ts:37](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L37)
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-[src/utils/misc/ItemPool.ts:46](https://github.com/guestbell/fast-ftp/blob/57989a0/src/utils/misc/ItemPool.ts#L46)
+[src/utils/misc/ItemPool.ts:46](https://github.com/guestbell/fast-ftp/blob/beffefa/src/utils/misc/ItemPool.ts#L46)

@@ -11,6 +11,7 @@ interface AsyncClient extends Client {
 }
 
 interface ClientConfig extends Options {
+    operationTimeout?: number;
 }
 
 interface DeployConfig {
@@ -59,6 +60,7 @@ declare const WinstonLogLevels: WinstonLogLevel[];
 declare const getFinalFtpConfig: (config: Partial<FtpFunctionConfig>) => {
     retries: number;
     logLevel: WinstonLogLevel;
+    operationTimeout: number;
 };
 
 declare const deleteDirectory: (config: Partial<FtpFunctionConfig>) => (clientPool: ItemPool<AsyncClient>, remoteDir: string) => Promise<void>;
@@ -80,6 +82,7 @@ declare const deleteDirectories: (config: Partial<FtpFunctionConfig>) => (client
 type FtpFunctionConfig = {
     retries: number;
     logLevel: WinstonLogLevel;
+    operationTimeout: number;
 };
 
 declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig, ftpFunctionConfig: Partial<FtpFunctionConfig>): Promise<void>;

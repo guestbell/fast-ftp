@@ -6,6 +6,7 @@ import {
   ClientError,
   FtpFunctionConfig,
 } from "../../types";
+import { withTimeoutFunction } from "utils/misc/withTimeout";
 
 export const getClients =
   (config: Partial<FtpFunctionConfig>) =>
@@ -16,29 +17,59 @@ export const getClients =
       clientsPromises = clientsPromises.concat([
         new Promise((resolve, reject) => {
           client.on("ready", () => {
-            client.renameAsync = promisify(client.rename).bind(client);
-            client.mkdirAsync = promisify(client.mkdir).bind(client);
-            client.rmdirAsync = promisify(client.rmdir).bind(client);
-            client.putAsync = promisify(client.put).bind(client);
-            client.deleteAsync = promisify(client.delete).bind(client);
-            client.listAsync = async (remoteDir: string) =>
-              (await new Promise<ListingElement[]>((resolve, reject) =>
-                client.list(
-                  remoteDir.replaceAll(/\\/g, "/"),
-                  (err: Error, data: ListingElement[]) => {
-                    if (err && (err as ClientError).code !== 450) {
-                      reject(err);
-                    } else {
-                      resolve(
-                        (data ?? []).filter(
-                          (a) => a.name !== "." && a.name !== ".."
-                        )
-                      );
+            const { operationTimeout = 10_000 } = config;
+
+            client.renameAsync = withTimeoutFunction(
+              promisify(client.rename).bind(client),
+              operationTimeout,
+              "renameAsync timed out"
+            );
+
+            client.mkdirAsync = withTimeoutFunction(
+              promisify(client.mkdir).bind(client),
+              operationTimeout,
+              "mkdirAsync timed out"
+            );
+
+            client.rmdirAsync = withTimeoutFunction(
+              promisify(client.rmdir).bind(client),
+              operationTimeout,
+              "rmdirAsync timed out"
+            );
+
+            client.putAsync = withTimeoutFunction(
+              promisify(client.put).bind(client),
+              operationTimeout,
+              "putAsync timed out"
+            );
+
+            client.deleteAsync = withTimeoutFunction(
+              promisify(client.delete).bind(client),
+              operationTimeout,
+              "deleteAsync timed out"
+            );
+
+            client.listAsync = withTimeoutFunction(
+              (remoteDir: string) =>
+                new Promise<ListingElement[]>((resolve, reject) =>
+                  client.list(
+                    remoteDir.replaceAll(/\\/g, "/"),
+                    (err: Error, data: ListingElement[]) => {
+                      if (err && (err as ClientError).code !== 450) {
+                        reject(err);
+                      } else {
+                        resolve(
+                          (data ?? []).filter(
+                            (a) => a.name !== "." && a.name !== ".."
+                          )
+                        );
+                      }
                     }
-                  }
-                )
-              )) ?? [];
-            // client.listAsync = util.promisify(client.listAsync).bind(client);
+                  )
+                ),
+              operationTimeout,
+              "listAsync timed out"
+            );
             resolve(client);
           });
           client.on("error", (err) => {
