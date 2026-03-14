@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/types/ClientError.ts:2](https://github.com/guestbell/fast-ftp/blob/7bc8a0b/src/types/ClientError.ts#L2)
+[src/types/ClientError.ts:2](https://github.com/guestbell/fast-ftp/blob/3566f0d/src/types/ClientError.ts#L2)
 
 ___
 

@@ -15160,13 +15160,20 @@ async function withRetry(fn, retries, onRetry) {
 }
 
 const getAllRemote = (config) => async (itemPool, remoteDir) => {
+    const { retries } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
-    const client = await itemPool.acquire();
     logger.verbose("Listing directory " + remoteDir);
-    const files = await client.listAsync(remoteDir.replaceAll(/\\/g, "/"));
-    itemPool.release(client);
+    const files = await withRetry(async () => {
+        const client = await itemPool.acquire();
+        try {
+            return await client.listAsync(remoteDir.replaceAll(/\\/g, "/"));
+        }
+        finally {
+            itemPool.release(client);
+        }
+    }, retries, (retriesLeft) => logger.warn(`Failed to list directory '${remoteDir}', retrying (${retriesLeft} attempts left)...`));
     const arrayOfFiles = [];
-    let arrayOfFilesPromises = [];
+    const arrayOfFilesPromises = [];
     for (let index = 0; index < files.length; index++) {
         const file = files[index];
         arrayOfFiles.push({
