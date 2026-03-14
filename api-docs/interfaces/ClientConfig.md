@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/types/ClientConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/beffefa/src/types/ClientConfig.ts#L4)
+[src/types/ClientConfig.ts:4](https://github.com/guestbell/fast-ftp/blob/84ee2ee/src/types/ClientConfig.ts#L4)
 
 ___
 

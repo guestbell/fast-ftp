@@ -13,7 +13,7 @@ export const uploadFiles =
     clientsPool: ItemPool<AsyncClient>,
     allFiles: string[],
     localDir: string,
-    remoteDir: string
+    remoteDir: string,
   ) => {
     const { retries } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
@@ -30,7 +30,7 @@ export const uploadFiles =
         remoteDir,
         file
           .replaceAll(/\//g, "\\")
-          .split(resolvedLocalDir.replaceAll(/\//g, "\\"))[1]
+          .split(resolvedLocalDir.replaceAll(/\//g, "\\"))[1],
       ).replaceAll(/\\/g, "/");
       filesPromises.push(
         client
@@ -41,7 +41,7 @@ export const uploadFiles =
           })
           .finally(() => {
             clientsPool.release(client);
-          })
+          }),
       );
       count++;
       logger.verbose(`Uploading files ${count}/${totalLength}...`);
@@ -49,16 +49,18 @@ export const uploadFiles =
     await Promise.all(filesPromises);
     if (failedFiles.length) {
       if (retries) {
-        logger.warn("Some files failed uploading, retrying now ...");
+        logger.warn(
+          `${failedFiles.length} file(s) failed uploading, retrying (${retries} attempts left)...`,
+        );
         await uploadFiles({ ...config, retries: retries - 1 })(
           clientsPool,
           failedFiles,
           localDir,
-          remoteDir
+          remoteDir,
         );
       } else {
         throw new Error(
-          "Some files were not uploaded. More details above this message."
+          "Some files were not uploaded. More details above this message.",
         );
       }
     }

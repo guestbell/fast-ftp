@@ -25,7 +25,7 @@ export const deleteFiles =
           })
           .finally(() => {
             clientPool.release(client);
-          })
+          }),
       );
       count++;
       logger.verbose(`Deleting files ${count}/${totalLength}...`);
@@ -33,14 +33,16 @@ export const deleteFiles =
     await Promise.all(filesPromises);
     if (failedFiles.length) {
       if (retries) {
-        logger.warn("Some files failed deleting, retrying now ...");
+        logger.warn(
+          `${failedFiles.length} file(s) failed deleting, retrying (${retries} attempts left)...`,
+        );
         await deleteFiles({ ...config, retries: retries - 1 })(
           clientPool,
-          failedFiles
+          failedFiles,
         );
       } else {
         throw new Error(
-          "Some files were not deleted. More details above this message."
+          "Some files were not deleted. More details above this message.",
         );
       }
     }

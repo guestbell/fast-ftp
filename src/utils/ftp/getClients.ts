@@ -6,7 +6,7 @@ import {
   ClientError,
   FtpFunctionConfig,
 } from "../../types";
-import { withTimeoutFunction } from "utils/misc/withTimeout";
+import { withTimeoutFunction } from "../misc/withTimeout";
 
 export const getClients =
   (config: Partial<FtpFunctionConfig>) =>

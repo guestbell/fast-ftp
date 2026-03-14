@@ -63,6 +63,8 @@ declare const getFinalFtpConfig: (config: Partial<FtpFunctionConfig>) => {
     operationTimeout: number;
 };
 
+declare function withRetry<T>(fn: () => Promise<T>, retries: number, onRetry?: (retriesLeft: number, err: unknown) => void): Promise<T>;
+
 declare const deleteDirectory: (config: Partial<FtpFunctionConfig>) => (clientPool: ItemPool<AsyncClient>, remoteDir: string) => Promise<void>;
 
 declare const uploadDirectory: (config: Partial<FtpFunctionConfig>) => (clientsPool: ItemPool<AsyncClient>, remoteDir: string, localDir: string) => Promise<void>;
@@ -87,4 +89,4 @@ type FtpFunctionConfig = {
 
 declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig, ftpFunctionConfig: Partial<FtpFunctionConfig>): Promise<void>;
 
-export { AsyncClient, ClientConfig, ClientError, DeployConfig, FtpFunctionConfig, ItemPool, WinstonLogLevel, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirsToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles };
+export { AsyncClient, ClientConfig, ClientError, DeployConfig, FtpFunctionConfig, ItemPool, WinstonLogLevel, WinstonLogLevels, createLogger, createLoggerFromPartialConfig, deleteDirectories, deleteDirectory, deleteFiles, deploy, dirsToParallelBatches, getAllDirDirs, getAllDirFiles, getAllRemote, getClientConfig, getClients, getDeployConfig, getFinalFtpConfig, getFtpFunctionConfig, removeKeys, sortFilesBySize, uploadDirectories, uploadDirectory, uploadFiles, withRetry };

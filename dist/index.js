@@ -15150,6 +15150,19 @@ class ItemPool {
     }
 }
 
+async function withRetry(fn, retries, onRetry) {
+    try {
+        return await fn();
+    }
+    catch (err) {
+        if (retries > 0) {
+            onRetry?.(retries, err);
+            return withRetry(fn, retries - 1, onRetry);
+        }
+        throw err;
+    }
+}
+
 const getAllRemote = (config) => async (itemPool, remoteDir) => {
     const logger = createLoggerFromPartialConfig(config);
     const client = await itemPool.acquire();
@@ -15199,7 +15212,7 @@ const deleteFiles = (config) => async (clientPool, allFiles) => {
     await Promise.all(filesPromises);
     if (failedFiles.length) {
         if (retries) {
-            logger.warn("Some files failed deleting, retrying now ...");
+            logger.warn(`${failedFiles.length} file(s) failed deleting, retrying (${retries} attempts left)...`);
             await deleteFiles({ ...config, retries: retries - 1 })(clientPool, failedFiles);
         }
         else {
@@ -15209,50 +15222,37 @@ const deleteFiles = (config) => async (clientPool, allFiles) => {
 };
 
 const deleteDirectories = (config) => async (clientPool, allDirs) => {
-    /*allDirs.sort((a, b) => {
-    const aNumSlashes = a.split("/").length;
-    const bNumSlashes = b.split("/").length;
-
-    return bNumSlashes - aNumSlashes;
-  });
-  for (let index = 0; index < allDirs.length; index++) {
-    const dir = allDirs[index];
-    await clients[0].rmdirAsync(dir, true).catch((err) => {
-      if (err && err.code !== 450) {
-        console.error(err);
-        throw err;
-      }
-    });
-  }*/
+    const { retries } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
-    /*const tree = getDirTree(allDirs);
-    const parallel = dirTreeToParallelBatches(tree);*/
     const parallel = dirsToParallelBatches(allDirs);
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
         const batch = parallel[batchIndex];
-        const filesPromises = [];
-        for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
-            const dir = batch[dirIndex];
+        await Promise.all(batch.map((dir) => {
             logger.verbose("Deleting directory: " + dir);
-            const client = await clientPool.acquire();
-            filesPromises.push(client
-                .rmdirAsync(dir)
-                .catch((err) => {
-                if (err.code !== 550) {
-                    logger.error("Error deleting directory " + dir, err);
+            return withRetry(async () => {
+                const client = await clientPool.acquire();
+                try {
+                    await client.rmdirAsync(dir);
                 }
-                throw err;
-            })
-                .finally(() => {
-                clientPool.release(client);
-            }));
-        }
-        await Promise.all(filesPromises);
+                catch (err) {
+                    if (err.code === 550)
+                        return; // already gone, nothing to do
+                    throw err;
+                }
+                finally {
+                    clientPool.release(client);
+                }
+            }, retries, (retriesLeft) => logger.warn(`Failed to delete directory '${dir}', retrying (${retriesLeft} attempts left)...`));
+        }));
     }
 };
 
 const deleteDirectory = (config) => async (clientPool, remoteDir) => {
-    const allRemote = await getAllRemote(config)(clientPool, remoteDir);
+    const allRemote = await getAllRemote(config)(clientPool, remoteDir).catch((err) => {
+        if (err.code === 550)
+            return []; // directory doesn't exist, nothing to delete
+        throw err;
+    });
     const allFiles = allRemote.filter((a) => a.type === "-").map((a) => a.name);
     const allDirs = allRemote.filter((a) => a.type === "d").map((a) => a.name);
     await deleteFiles(config)(clientPool, allFiles);
@@ -15289,7 +15289,7 @@ const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDi
     await Promise.all(filesPromises);
     if (failedFiles.length) {
         if (retries) {
-            logger.warn("Some files failed uploading, retrying now ...");
+            logger.warn(`${failedFiles.length} file(s) failed uploading, retrying (${retries} attempts left)...`);
             await uploadFiles({ ...config, retries: retries - 1 })(clientsPool, failedFiles, localDir, remoteDir);
         }
         else {
@@ -15299,49 +15299,33 @@ const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDi
 };
 
 const uploadDirectories = (config) => async (clientsPool, allDirs, localDir, remoteDir) => {
+    const { retries } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
     const resolvedLocalDir = require$$1.resolve(localDir);
     const resolvedDirs = allDirs.map((a) => require$$1.join(remoteDir, require$$1.resolve(a)
         .replaceAll(/\//g, "\\")
         .replace(resolvedLocalDir.replaceAll(/\//g, "\\"), "")).replaceAll(/\\/g, "/"));
-    /*const tree = getDirTree(resolvedDirs);
-    const parallel = dirTreeToParallelBatches(tree).reverse();*/
     const parallel = dirsToParallelBatches(resolvedDirs).reverse();
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
         const batch = parallel[batchIndex];
-        const clientsPromises = [];
-        for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
-            const dir = batch[dirIndex];
+        await Promise.all(batch.map((dir) => {
             logger.verbose("Creating directory: " + dir);
-            const client = await clientsPool.acquire();
-            clientsPromises.push(client
-                .mkdirAsync(dir)
-                .catch((err) => {
-                if (err && err.code !== 450) {
-                    console.error(err);
+            return withRetry(async () => {
+                const client = await clientsPool.acquire();
+                try {
+                    await client.mkdirAsync(dir);
+                }
+                catch (err) {
+                    if (err && err.code === 450)
+                        return; // already exists
                     throw err;
                 }
-            })
-                .finally(() => {
-                clientsPool.release(client);
-            }));
-        }
-        await Promise.all(clientsPromises);
+                finally {
+                    clientsPool.release(client);
+                }
+            }, retries, (retriesLeft) => logger.warn(`Failed to create directory '${dir}', retrying (${retriesLeft} attempts left)...`));
+        }));
     }
-    /*for (let index = 0; index < allDirs.length; index++) {
-    const f = allDirs[index];
-    const remotePath = join(
-      remoteDir,
-      f.replaceAll(/\//g, "\\").replace(localDir.replaceAll(/\//g, "\\"), "")
-    ).replaceAll(/\\/g, "/");
-    console.log("Creating directory: ", remotePath);
-    await clients[0].mkdirAsync(remotePath).catch((err) => {
-      if (err && err.code !== 450) {
-        console.error(err);
-        throw err;
-      }
-    });
-  }*/
 };
 
 const uploadDirectory = (config) => async (clientsPool, remoteDir, localDir) => {
@@ -21199,67 +21183,57 @@ const getClients = (config) => async (concurrency = 30, config) => {
 async function deploy(deployConfig, clientConfig, ftpFunctionConfig) {
     const { remoteRoot, tempRoot, oldRoot, localRoot, concurrency = 16, } = deployConfig;
     const logger = createLoggerFromPartialConfig(ftpFunctionConfig);
+    const { retries } = getFinalFtpConfig(ftpFunctionConfig);
     const clients = await getClients()(concurrency, clientConfig);
     const clientPool = new ItemPool(clients);
     const client = clients[0];
     logger.info(`Starting to deploy '${remoteRoot}' from '${localRoot}' using ${clients.length} connections.`);
-    // Delete existing old deployment
-    return new Promise(async (resolve) => {
-        logger.info("Task 1/7: Delete '" + tempRoot + "'.");
-        logger.info("Task 2/7: Delete '" + oldRoot + "'.");
-        const deleteTmp = deleteDirectory(ftpFunctionConfig)(clientPool, tempRoot);
-        const deleteOld = deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot);
-        await Promise.all([deleteTmp, deleteOld]);
-        resolve();
-    })
-        .then(async () => {
-        try {
-            logger.info("Task 3/7: Create '" + tempRoot + "'.");
-            await client.mkdirAsync(tempRoot);
-        }
-        catch (err) {
-            if (err && err.code !== 550) {
-                logger.error("Error when creating '" + tempRoot + "'.", err);
+    try {
+        // Tasks 1 & 2: Delete any leftover temp and old directories from a previous run
+        logger.info(`Task 1/7: Delete '${tempRoot}'.`);
+        logger.info(`Task 2/7: Delete '${oldRoot}'.`);
+        await Promise.all([
+            deleteDirectory(ftpFunctionConfig)(clientPool, tempRoot),
+            deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot),
+        ]);
+        // Task 3: Create fresh temp directory
+        logger.info(`Task 3/7: Create '${tempRoot}'.`);
+        await withRetry(async () => {
+            try {
+                await client.mkdirAsync(tempRoot);
+            }
+            catch (err) {
+                if (err.code === 550)
+                    return; // already exists, fine
                 throw err;
             }
-        }
-    })
-        .then(() => {
+        }, retries, (retriesLeft) => logger.warn(`Task 3/7: Failed to create '${tempRoot}', retrying (${retriesLeft} attempts left)...`));
+        // Task 4: Upload new files into temp directory
         logger.info(`Task 4/7: Upload '${remoteRoot}' from '${localRoot}'.`);
-        const outTotalPath = require$$1.resolve(localRoot);
-        return uploadDirectory(ftpFunctionConfig)(clientPool, tempRoot, outTotalPath);
-    })
-        .then(async () => {
-        try {
-            logger.info("Task 5/7: Rename '" + remoteRoot + "' => '" + oldRoot + "'.");
-            await client.renameAsync(remoteRoot, oldRoot);
-        }
-        catch (err) {
-            if (err && err.code !== 550) {
-                logger.error("Error when renaming '" + remoteRoot + "' => '" + oldRoot + "'.");
+        await uploadDirectory(ftpFunctionConfig)(clientPool, tempRoot, require$$1.resolve(localRoot));
+        // Task 5: Move the live directory aside so we can swap in the new one
+        logger.info(`Task 5/7: Rename '${remoteRoot}' => '${oldRoot}'.`);
+        await withRetry(async () => {
+            try {
+                await client.renameAsync(remoteRoot, oldRoot);
+            }
+            catch (err) {
+                if (err.code === 550)
+                    return; // remoteRoot absent (first deploy), skip
                 throw err;
             }
-        }
-    })
-        .then(async () => {
-        try {
-            logger.info("Task 6/7: Rename '" + tempRoot + "' => '" + remoteRoot + "'.");
-            await client.renameAsync(tempRoot, remoteRoot);
-        }
-        catch (err) {
-            logger.error("Error when renaming " + tempRoot + "' => '" + remoteRoot + "'.");
-            throw err;
-        }
-    })
-        .then(() => {
-        logger.info("Task 7/7: Delete '" + oldRoot + "'.");
-        return deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot);
-    })
-        .finally(() => {
-        clients.forEach((client) => {
-            client.end();
-        });
-    });
+        }, retries, (retriesLeft) => logger.warn(`Task 5/7: Failed to rename '${remoteRoot}' => '${oldRoot}', retrying (${retriesLeft} attempts left)...`));
+        // Task 6: Promote new upload to the live path — most critical step
+        logger.info(`Task 6/7: Rename '${tempRoot}' => '${remoteRoot}'.`);
+        await withRetry(() => client.renameAsync(tempRoot, remoteRoot), retries, (retriesLeft) => logger.warn(`Task 6/7: Failed to rename '${tempRoot}' => '${remoteRoot}', retrying (${retriesLeft} attempts left)...`));
+        // Task 7: Clean up the old directory
+        logger.info(`Task 7/7: Delete '${oldRoot}'.`);
+        await deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot);
+        logger.info(`Successfully deployed '${localRoot}' to '${remoteRoot}'.`);
+    }
+    finally {
+        clients.forEach((c) => c.end());
+    }
 }
 
 console.time("Deployment");

@@ -6,3 +6,4 @@ export { dirsToParallelBatches } from "./dirsToParallelBatches";
 export { ItemPool } from "./ItemPool";
 export * from "./logger";
 export * from "./getFinalFtpConfig";
+export { withRetry } from "./withRetry";

@@ -2,53 +2,42 @@ import { AsyncClient, ClientError } from "../../types";
 import {
   createLoggerFromPartialConfig,
   dirsToParallelBatches,
+  getFinalFtpConfig,
   ItemPool,
+  withRetry,
 } from "../misc";
 import { FtpFunctionConfig } from "../../types";
 
 export const deleteDirectories =
   (config: Partial<FtpFunctionConfig>) =>
   async (clientPool: ItemPool<AsyncClient>, allDirs: string[]) => {
-    /*allDirs.sort((a, b) => {
-    const aNumSlashes = a.split("/").length;
-    const bNumSlashes = b.split("/").length;
-
-    return bNumSlashes - aNumSlashes;
-  });
-  for (let index = 0; index < allDirs.length; index++) {
-    const dir = allDirs[index];
-    await clients[0].rmdirAsync(dir, true).catch((err) => {
-      if (err && err.code !== 450) {
-        console.error(err);
-        throw err;
-      }
-    });
-  }*/
+    const { retries } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
-    /*const tree = getDirTree(allDirs);
-    const parallel = dirTreeToParallelBatches(tree);*/
     const parallel = dirsToParallelBatches(allDirs);
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
       const batch = parallel[batchIndex];
-      const filesPromises: Promise<void>[] = [];
-      for (let dirIndex = 0; dirIndex < batch.length; dirIndex++) {
-        const dir = batch[dirIndex];
-        logger.verbose("Deleting directory: " + dir);
-        const client = await clientPool.acquire();
-        filesPromises.push(
-          client
-            .rmdirAsync(dir)
-            .catch((err) => {
-              if ((err as ClientError).code !== 550) {
-                logger.error("Error deleting directory " + dir, err);
+      await Promise.all(
+        batch.map((dir) => {
+          logger.verbose("Deleting directory: " + dir);
+          return withRetry(
+            async () => {
+              const client = await clientPool.acquire();
+              try {
+                await client.rmdirAsync(dir);
+              } catch (err) {
+                if ((err as ClientError).code === 550) return; // already gone, nothing to do
+                throw err;
+              } finally {
+                clientPool.release(client);
               }
-              throw err;
-            })
-            .finally(() => {
-              clientPool.release(client);
-            })
-        );
-      }
-      await Promise.all(filesPromises);
+            },
+            retries,
+            (retriesLeft) =>
+              logger.warn(
+                `Failed to delete directory '${dir}', retrying (${retriesLeft} attempts left)...`,
+              ),
+          );
+        }),
+      );
     }
   };
