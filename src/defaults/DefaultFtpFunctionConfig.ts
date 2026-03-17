@@ -4,4 +4,5 @@ export const DefaultFtpFunctionConfig: FtpFunctionConfig = {
   retries: 10,
   logLevel: "info",
   operationTimeout: 10000,
+  showProgress: true,
 };

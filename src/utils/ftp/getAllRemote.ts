@@ -27,8 +27,8 @@ export const getAllRemote =
       retries,
       (retriesLeft) =>
         logger.warn(
-          `Failed to list directory '${remoteDir}', retrying (${retriesLeft} attempts left)...`
-        )
+          `Failed to list directory '${remoteDir}', retrying (${retriesLeft} attempts left)...`,
+        ),
     );
 
     const arrayOfFiles: ListingElement[] = [];
@@ -43,14 +43,14 @@ export const getAllRemote =
         arrayOfFilesPromises.push(
           getAllRemote(config)(
             itemPool,
-            join(remoteDir, file.name).replaceAll(/\\/g, "/")
-          )
+            join(remoteDir, file.name).replaceAll(/\\/g, "/"),
+          ),
         );
       }
     }
     const allResolve = await Promise.all(arrayOfFilesPromises);
     return allResolve.reduce(
       (prev, current) => prev.concat(current),
-      arrayOfFiles
+      arrayOfFiles,
     );
   };

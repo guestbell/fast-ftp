@@ -61,6 +61,7 @@ declare const getFinalFtpConfig: (config: Partial<FtpFunctionConfig>) => {
     retries: number;
     logLevel: WinstonLogLevel;
     operationTimeout: number;
+    showProgress: boolean;
 };
 
 declare function withRetry<T>(fn: () => Promise<T>, retries: number, onRetry?: (retriesLeft: number, err: unknown) => void): Promise<T>;
@@ -85,6 +86,7 @@ type FtpFunctionConfig = {
     retries: number;
     logLevel: WinstonLogLevel;
     operationTimeout: number;
+    showProgress: boolean;
 };
 
 declare function deploy(deployConfig: DeployConfig, clientConfig: ClientConfig, ftpFunctionConfig: Partial<FtpFunctionConfig>): Promise<void>;

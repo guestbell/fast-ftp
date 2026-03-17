@@ -6,6 +6,7 @@ import {
   getFinalFtpConfig,
   ItemPool,
 } from "../misc";
+import * as cliProgress from "cli-progress";
 
 export const uploadFiles =
   (config: Partial<FtpFunctionConfig>) =>
@@ -15,7 +16,7 @@ export const uploadFiles =
     localDir: string,
     remoteDir: string,
   ) => {
-    const { retries } = getFinalFtpConfig(config);
+    const { retries, showProgress } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
     const resolvedLocalDir = resolvePath(localDir);
     allFiles = sortFilesBySize(allFiles);
@@ -23,6 +24,20 @@ export const uploadFiles =
     let filesPromises: Promise<void>[] = [];
     let count = 0;
     const failedFiles: string[] = [];
+
+    const bar =
+      showProgress && totalLength > 0
+        ? new cliProgress.SingleBar(
+            {
+              format: "Uploading |{bar}| {value}/{total} files",
+              clearOnComplete: false,
+              hideCursor: true,
+            },
+            cliProgress.Presets.shades_classic,
+          )
+        : null;
+    if (bar) bar.start(totalLength, 0);
+
     for (let j = 0; j < totalLength; j++) {
       const client = await clientsPool.acquire();
       const file = allFiles[j];
@@ -41,18 +56,20 @@ export const uploadFiles =
           })
           .finally(() => {
             clientsPool.release(client);
+            if (bar) bar.increment();
           }),
       );
       count++;
       logger.verbose(`Uploading files ${count}/${totalLength}...`);
     }
     await Promise.all(filesPromises);
+    if (bar) bar.stop();
     if (failedFiles.length) {
       if (retries) {
         logger.warn(
           `${failedFiles.length} file(s) failed uploading, retrying (${retries} attempts left)...`,
         );
-        await uploadFiles({ ...config, retries: retries - 1 })(
+        await uploadFiles({ ...config, showProgress: false, retries: retries - 1 })(
           clientsPool,
           failedFiles,
           localDir,

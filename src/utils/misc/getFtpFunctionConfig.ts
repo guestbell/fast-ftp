@@ -21,9 +21,15 @@ export const getFtpFunctionConfig = (): FtpFunctionConfig => {
   if (isNaN(retries)) {
     throw new Error(`--retries parameter only supports integers.`);
   }
+  const showProgressArg = args["show-progress"];
+  const showProgress =
+    showProgressArg == null
+      ? DefaultFtpFunctionConfig.showProgress
+      : showProgressArg !== false && showProgressArg !== "false";
   return {
     retries,
     logLevel,
     operationTimeout,
+    showProgress,
   };
 };

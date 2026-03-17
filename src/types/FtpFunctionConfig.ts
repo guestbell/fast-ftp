@@ -4,4 +4,5 @@ export type FtpFunctionConfig = {
   retries: number;
   logLevel: WinstonLogLevel;
   operationTimeout: number;
+  showProgress: boolean;
 };
