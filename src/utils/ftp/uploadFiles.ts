@@ -69,12 +69,11 @@ export const uploadFiles =
         logger.warn(
           `${failedFiles.length} file(s) failed uploading, retrying (${retries} attempts left)...`,
         );
-        await uploadFiles({ ...config, showProgress: false, retries: retries - 1 })(
-          clientsPool,
-          failedFiles,
-          localDir,
-          remoteDir,
-        );
+        await uploadFiles({
+          ...config,
+          showProgress: false,
+          retries: retries - 1,
+        })(clientsPool, failedFiles, localDir, remoteDir);
       } else {
         throw new Error(
           "Some files were not uploaded. More details above this message.",

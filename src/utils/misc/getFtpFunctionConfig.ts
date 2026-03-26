@@ -15,7 +15,7 @@ export const getFtpFunctionConfig = (): FtpFunctionConfig => {
     DefaultFtpFunctionConfig.operationTimeout;
   if (logLevel && !WinstonLogLevels.some((a) => a === logLevel)) {
     throw new Error(
-      `--log-level parameter only supports these values: [${WinstonLogLevels}] , [${logLevel}] was provided instead.`
+      `--log-level parameter only supports these values: [${WinstonLogLevels}] , [${logLevel}] was provided instead.`,
     );
   }
   if (isNaN(retries)) {
