@@ -15203,80 +15203,6 @@ const getAllRemote = (config) => async (itemPool, remoteDir) => {
     return allResolve.reduce((prev, current) => prev.concat(current), arrayOfFiles);
 };
 
-const deleteFiles = (config) => async (clientPool, allFiles) => {
-    const { retries } = getFinalFtpConfig(config);
-    const logger = createLoggerFromPartialConfig(config);
-    const totalLength = allFiles.length;
-    let filesPromises = [];
-    let count = 0;
-    const failedFiles = [];
-    for (let j = 0; j < totalLength; j++) {
-        const file = allFiles[j];
-        const client = await clientPool.acquire();
-        filesPromises.push(client
-            .deleteAsync(file)
-            .catch((err) => {
-            if (err.code !== 550) {
-                logger.error("Error deleting a file: " + file, err);
-                failedFiles.push(file);
-            }
-        })
-            .finally(() => {
-            clientPool.release(client);
-        }));
-        count++;
-        logger.verbose(`Deleting files ${count}/${totalLength}...`);
-    }
-    await Promise.all(filesPromises);
-    if (failedFiles.length) {
-        if (retries) {
-            logger.warn(`${failedFiles.length} file(s) failed deleting, retrying (${retries} attempts left)...`);
-            await deleteFiles({ ...config, retries: retries - 1 })(clientPool, failedFiles);
-        }
-        else {
-            throw new Error("Some files were not deleted. More details above this message.");
-        }
-    }
-};
-
-const deleteDirectories = (config) => async (clientPool, allDirs) => {
-    const { retries } = getFinalFtpConfig(config);
-    const logger = createLoggerFromPartialConfig(config);
-    const parallel = dirsToParallelBatches(allDirs);
-    for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
-        const batch = parallel[batchIndex];
-        await Promise.all(batch.map((dir) => {
-            logger.verbose("Deleting directory: " + dir);
-            return withRetry(async () => {
-                const client = await clientPool.acquire();
-                try {
-                    await client.rmdirAsync(dir);
-                }
-                catch (err) {
-                    if (err.code === 550)
-                        return; // already gone, nothing to do
-                    throw err;
-                }
-                finally {
-                    clientPool.release(client);
-                }
-            }, retries, (retriesLeft) => logger.warn(`Failed to delete directory '${dir}', retrying (${retriesLeft} attempts left)...`));
-        }));
-    }
-};
-
-const deleteDirectory = (config) => async (clientPool, remoteDir) => {
-    const allRemote = await getAllRemote(config)(clientPool, remoteDir).catch((err) => {
-        if (err.code === 550)
-            return []; // directory doesn't exist, nothing to delete
-        throw err;
-    });
-    const allFiles = allRemote.filter((a) => a.type === "-").map((a) => a.name);
-    const allDirs = allRemote.filter((a) => a.type === "d").map((a) => a.name);
-    await deleteFiles(config)(clientPool, allFiles);
-    await deleteDirectories(config)(clientPool, allDirs);
-};
-
 // ETA calculation
 class ETA{
 
@@ -16586,6 +16512,108 @@ var cliProgress = {
     }
 };
 
+const deleteFiles = (config) => async (clientPool, allFiles) => {
+    const { retries, showProgress } = getFinalFtpConfig(config);
+    const logger = createLoggerFromPartialConfig(config);
+    const totalLength = allFiles.length;
+    let filesPromises = [];
+    let count = 0;
+    const failedFiles = [];
+    const bar = showProgress && totalLength > 0
+        ? new cliProgress.SingleBar({
+            format: "Deleting files |{bar}| {value}/{total} files",
+            clearOnComplete: false,
+            hideCursor: true,
+        }, cliProgress.Presets.shades_classic)
+        : null;
+    if (bar)
+        bar.start(totalLength, 0);
+    for (let j = 0; j < totalLength; j++) {
+        const file = allFiles[j];
+        const client = await clientPool.acquire();
+        filesPromises.push(client
+            .deleteAsync(file)
+            .catch((err) => {
+            if (err.code !== 550) {
+                logger.error("Error deleting a file: " + file, err);
+                failedFiles.push(file);
+            }
+        })
+            .finally(() => {
+            clientPool.release(client);
+            if (bar)
+                bar.increment();
+        }));
+        count++;
+        logger.verbose(`Deleting files ${count}/${totalLength}...`);
+    }
+    await Promise.all(filesPromises);
+    if (bar)
+        bar.stop();
+    if (failedFiles.length) {
+        if (retries) {
+            logger.warn(`${failedFiles.length} file(s) failed deleting, retrying (${retries} attempts left)...`);
+            await deleteFiles({ ...config, showProgress: false, retries: retries - 1 })(clientPool, failedFiles);
+        }
+        else {
+            throw new Error("Some files were not deleted. More details above this message.");
+        }
+    }
+};
+
+const deleteDirectories = (config) => async (clientPool, allDirs) => {
+    const { retries, showProgress } = getFinalFtpConfig(config);
+    const logger = createLoggerFromPartialConfig(config);
+    const parallel = dirsToParallelBatches(allDirs);
+    const totalDirs = allDirs.length;
+    const bar = showProgress && totalDirs > 0
+        ? new cliProgress.SingleBar({
+            format: "Deleting dirs  |{bar}| {value}/{total} dirs",
+            clearOnComplete: false,
+            hideCursor: true,
+        }, cliProgress.Presets.shades_classic)
+        : null;
+    if (bar)
+        bar.start(totalDirs, 0);
+    for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
+        const batch = parallel[batchIndex];
+        await Promise.all(batch.map((dir) => {
+            logger.verbose("Deleting directory: " + dir);
+            return withRetry(async () => {
+                const client = await clientPool.acquire();
+                try {
+                    await client.rmdirAsync(dir);
+                }
+                catch (err) {
+                    if (err.code === 550)
+                        return; // already gone, nothing to do
+                    throw err;
+                }
+                finally {
+                    clientPool.release(client);
+                }
+            }, retries, (retriesLeft) => logger.warn(`Failed to delete directory '${dir}', retrying (${retriesLeft} attempts left)...`)).finally(() => {
+                if (bar)
+                    bar.increment();
+            });
+        }));
+    }
+    if (bar)
+        bar.stop();
+};
+
+const deleteDirectory = (config) => async (clientPool, remoteDir) => {
+    const allRemote = await getAllRemote(config)(clientPool, remoteDir).catch((err) => {
+        if (err.code === 550)
+            return []; // directory doesn't exist, nothing to delete
+        throw err;
+    });
+    const allFiles = allRemote.filter((a) => a.type === "-").map((a) => a.name);
+    const allDirs = allRemote.filter((a) => a.type === "d").map((a) => a.name);
+    await deleteFiles(config)(clientPool, allFiles);
+    await deleteDirectories(config)(clientPool, allDirs);
+};
+
 const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDir) => {
     const { retries, showProgress } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
@@ -16630,7 +16658,11 @@ const uploadFiles = (config) => async (clientsPool, allFiles, localDir, remoteDi
     if (failedFiles.length) {
         if (retries) {
             logger.warn(`${failedFiles.length} file(s) failed uploading, retrying (${retries} attempts left)...`);
-            await uploadFiles({ ...config, showProgress: false, retries: retries - 1 })(clientsPool, failedFiles, localDir, remoteDir);
+            await uploadFiles({
+                ...config,
+                showProgress: false,
+                retries: retries - 1,
+            })(clientsPool, failedFiles, localDir, remoteDir);
         }
         else {
             throw new Error("Some files were not uploaded. More details above this message.");
@@ -22532,9 +22564,10 @@ async function deploy(deployConfig, clientConfig, ftpFunctionConfig) {
         // Tasks 1 & 2: Delete any leftover temp and old directories from a previous run
         logger.info(`Task 1/7: Delete '${tempRoot}'.`);
         logger.info(`Task 2/7: Delete '${oldRoot}'.`);
+        const noProgressConfig = { ...ftpFunctionConfig, showProgress: false };
         await Promise.all([
-            deleteDirectory(ftpFunctionConfig)(clientPool, tempRoot),
-            deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot),
+            deleteDirectory(noProgressConfig)(clientPool, tempRoot),
+            deleteDirectory(noProgressConfig)(clientPool, oldRoot),
         ]);
         // Task 3: Create fresh temp directory
         logger.info(`Task 3/7: Create '${tempRoot}'.`);

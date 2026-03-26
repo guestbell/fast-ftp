@@ -7,13 +7,29 @@ import {
   withRetry,
 } from "../misc";
 import { FtpFunctionConfig } from "../../types";
+import * as cliProgress from "cli-progress";
 
 export const deleteDirectories =
   (config: Partial<FtpFunctionConfig>) =>
   async (clientPool: ItemPool<AsyncClient>, allDirs: string[]) => {
-    const { retries } = getFinalFtpConfig(config);
+    const { retries, showProgress } = getFinalFtpConfig(config);
     const logger = createLoggerFromPartialConfig(config);
     const parallel = dirsToParallelBatches(allDirs);
+    const totalDirs = allDirs.length;
+
+    const bar =
+      showProgress && totalDirs > 0
+        ? new cliProgress.SingleBar(
+            {
+              format: "Deleting dirs  |{bar}| {value}/{total} dirs",
+              clearOnComplete: false,
+              hideCursor: true,
+            },
+            cliProgress.Presets.shades_classic,
+          )
+        : null;
+    if (bar) bar.start(totalDirs, 0);
+
     for (let batchIndex = 0; batchIndex < parallel.length; batchIndex++) {
       const batch = parallel[batchIndex];
       await Promise.all(
@@ -36,8 +52,11 @@ export const deleteDirectories =
               logger.warn(
                 `Failed to delete directory '${dir}', retrying (${retriesLeft} attempts left)...`,
               ),
-          );
+          ).finally(() => {
+            if (bar) bar.increment();
+          });
         }),
       );
     }
+    if (bar) bar.stop();
   };

@@ -45,9 +45,10 @@ export async function deploy(
     // Tasks 1 & 2: Delete any leftover temp and old directories from a previous run
     logger.info(`Task 1/7: Delete '${tempRoot}'.`);
     logger.info(`Task 2/7: Delete '${oldRoot}'.`);
+    const noProgressConfig = { ...ftpFunctionConfig, showProgress: false };
     await Promise.all([
-      deleteDirectory(ftpFunctionConfig)(clientPool, tempRoot),
-      deleteDirectory(ftpFunctionConfig)(clientPool, oldRoot),
+      deleteDirectory(noProgressConfig)(clientPool, tempRoot),
+      deleteDirectory(noProgressConfig)(clientPool, oldRoot),
     ]);
 
     // Task 3: Create fresh temp directory
