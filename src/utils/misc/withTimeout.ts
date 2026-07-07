@@ -3,12 +3,29 @@ export function withTimeoutPromise<T>(
   timeoutMs: number,
   errorMsg = "Operation timed out"
 ): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error(errorMsg)), timeoutMs)
-    ),
-  ]);
+  return new Promise<T>((resolve, reject) => {
+    let settled = false;
+    const timeoutId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error(errorMsg));
+    }, timeoutMs);
+
+    promise.then(
+      (value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        resolve(value);
+      },
+      (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        reject(error);
+      }
+    );
+  });
 }
 
 export function withTimeoutFunction<TArgs extends any[], TResult>(
@@ -17,11 +34,6 @@ export function withTimeoutFunction<TArgs extends any[], TResult>(
   errorMessage = "Operation timed out"
 ): (...args: TArgs) => Promise<TResult> {
   return (...args: TArgs) => {
-    return Promise.race([
-      fn(...args),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error(errorMessage)), timeoutMs)
-      ),
-    ]);
+    return withTimeoutPromise(fn(...args), timeoutMs, errorMessage);
   };
 }

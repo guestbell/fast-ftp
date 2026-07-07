@@ -22508,12 +22508,33 @@ function makeError(code, text) {
   return err;
 }
 
+function withTimeoutPromise(promise, timeoutMs, errorMsg = "Operation timed out") {
+    return new Promise((resolve, reject) => {
+        let settled = false;
+        const timeoutId = setTimeout(() => {
+            if (settled)
+                return;
+            settled = true;
+            reject(new Error(errorMsg));
+        }, timeoutMs);
+        promise.then((value) => {
+            if (settled)
+                return;
+            settled = true;
+            clearTimeout(timeoutId);
+            resolve(value);
+        }, (error) => {
+            if (settled)
+                return;
+            settled = true;
+            clearTimeout(timeoutId);
+            reject(error);
+        });
+    });
+}
 function withTimeoutFunction(fn, timeoutMs, errorMessage = "Operation timed out") {
     return (...args) => {
-        return Promise.race([
-            fn(...args),
-            new Promise((_, reject) => setTimeout(() => reject(new Error(errorMessage)), timeoutMs)),
-        ]);
+        return withTimeoutPromise(fn(...args), timeoutMs, errorMessage);
     };
 }
 
